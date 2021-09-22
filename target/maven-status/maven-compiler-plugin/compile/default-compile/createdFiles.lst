@@ -1,5 +1,7 @@
-com\revature\ocean\controllers\NotificationController.class
-com\revature\ocean\repository\NotificationDao.class
-com\revature\ocean\models\UserResponse.class
-com\revature\ocean\models\Notification.class
-com\revature\ocean\services\NotificationService.class
+com\revature\ocean\models\User.class
+com\revature\UserMicroserviceApplication.class
+com\revature\ocean\models\Response.class
+com\revature\ocean\services\EmailService.class
+com\revature\ocean\repository\UserDao.class
+com\revature\ocean\controllers\UserController.class
+com\revature\ocean\services\UserService.class
