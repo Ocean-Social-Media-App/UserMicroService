@@ -100,7 +100,7 @@ public class UserService {
     public HashSet<Integer> setBookmark(Integer userId, Integer postId){
         return this.userDao.setBookmark(userId, postId);
     }
-
+    //David: Testing if I can commit and add things
     public HashSet<Integer> removeBookmark(Integer userId, Integer postId){
         return this.userDao.removeBookmark(userId, postId);
     }
