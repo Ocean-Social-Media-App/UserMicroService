@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
 import java.util.List;
+import java.util.Set;
 
 @RestController("userController")
 @CrossOrigin(value = "http://localhost:4200/", allowCredentials = "true")
@@ -126,4 +127,44 @@ public class UserController {
         }
         return response;
     }
+
+    @GetMapping("bookmark/{userId}")
+    public Response getBookmarks(@PathVariable Integer userId){
+        Response response;
+        Set<Integer> bookmarks = this.userService.getBookmarks(userId);
+
+        if(bookmarks != null){
+            response = new Response(true, "Bookmarks obtained.", bookmarks);
+        }else{
+            response = new Response(false, "Bookmarks not found.",null);
+        }
+        return response;
+    }
+
+    @PostMapping("bookmark/{userId}")
+    public Response setBookmark(@PathVariable Integer userId, @PathVariable Integer postId){
+        Response response;
+        Set<Integer> bookmarks = this.userService.setBookmark(userId, postId);
+
+        if(bookmarks != null){
+            response = new Response(true, "Bookmark set.", bookmarks);
+        }else{
+            response = new Response(false, "Bookmark not set.",null);
+        }
+        return response;
+    }
+
+    @DeleteMapping("bookmark/{userId}")
+    public Response removeBookmark(@PathVariable Integer userId, @PathVariable Integer postId){
+        Response response;
+        Set<Integer> bookmarks = this.userService.removeBookmark(userId, postId);
+
+        if(bookmarks != null){
+            response = new Response(true, "Bookmark removed.", bookmarks);
+        }else{
+            response = new Response(false, "Bookmark not removed.",null);
+        }
+        return response;
+    }
+}
 }
