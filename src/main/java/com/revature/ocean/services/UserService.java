@@ -1,8 +1,6 @@
 package com.revature.ocean.services;
 
 import com.revature.ocean.models.User;
-import com.revature.ocean.models.Response;
-import com.revature.ocean.models.UserResponse;
 import com.revature.ocean.repository.UserDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -18,10 +16,6 @@ public class UserService {
     public UserService(UserDao userDao){this.userDao = userDao;}
 
     BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-
-    protected static UserResponse format(User user) {
-        return new UserResponse(user.getUserId(), user.getUsername(), user.getProPicUrl(), user.getLastNotification());
-    }
 
     //Login
     public User login(User user){
