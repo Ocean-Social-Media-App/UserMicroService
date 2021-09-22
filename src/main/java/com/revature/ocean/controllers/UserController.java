@@ -11,7 +11,6 @@ import javax.servlet.http.HttpSession;
 import java.util.List;
 
 @RestController("userController")
-@RequestMapping(value= "api")
 @CrossOrigin(value = "http://localhost:4200/", allowCredentials = "true")
 public class UserController {
 
@@ -28,9 +27,9 @@ public class UserController {
         User user = (User) session.getAttribute("loggedInUser");
         if(user != null){
             user.setPassword(null);
-            response = new Response(true,"session found", user);
+            response = new Response(true,"Session found.", user);
         }else{
-            response = new Response(false, "session not found", null);
+            response = new Response(false, "No session found.", null);
         }
         return response;
     }
@@ -43,7 +42,7 @@ public class UserController {
         if (tempUser != null) {
             session.setAttribute("loggedInUser", user);
             tempUser.setPassword(null);
-            response = new Response(true, "logged In and session created", tempUser);
+            response = new Response(true, "Logged in and session created.", tempUser);
         } else {
             response = new Response(false, "Invalid username or password. (Remember, these are case sensitive!)",null);
         }
@@ -65,9 +64,9 @@ public class UserController {
         if (tempUser != null) {
             this.emailService.welcomeEmail(tempUser.getEmail(), tempUser.getFirstName());
             user.setPassword(null);
-            response = new Response(true, "user has been created", user);
+            response = new Response(true, "User successfully created.", user);
         } else {
-            response = new Response(false, "This User already exists", null);
+            response = new Response(false, "This User already exists.", null);
         }
         return response;
     }
@@ -78,9 +77,9 @@ public class UserController {
         Response response;
         List<User> allUsers = this.userService.getAllUsers();
         if(allUsers != null){
-            response = new Response(true, "here are all the users", allUsers);
+            response = new Response(true, "Users obtained.", allUsers);
         } else {
-            response = new Response(false, "Failed to find", null);
+            response = new Response(false, "Failed to find users.", null);
         }
         return response;
     }
@@ -94,7 +93,7 @@ public class UserController {
             String pass = this.emailService.sendNewPassword(tempUser.getEmail(), tempUser.getFirstName());
             tempUser.setPassword(pass);
             this.userService.updateUser(tempUser);
-            response = new Response(true, "An email has been sent to this account holder", tempUser.getEmail());
+            response = new Response(true, "An email has been sent to this account holder.", tempUser.getEmail());
         }else{
             response = new Response(false, "There is no user by the username:" + username, null);
         }
@@ -108,9 +107,9 @@ public class UserController {
         User updateUser = this.userService.updateUser(user);
         if(updateUser == user){
             user.setPassword(null);
-            return new Response(true,"Profile has been updated",user);
+            return new Response(true,"Profile has been updated.",user);
         }else{
-            return new Response(false,"Profile has not been updated", null);
+            return new Response(false,"Profile has not been updated.", null);
         }
     }
 
@@ -121,9 +120,9 @@ public class UserController {
         User user = (User) this.userService.getUserById(id);
         if(user != null){
             user.setPassword(null);
-            response = new Response(true, "Here is the user", user);
+            response = new Response(true, "User obtained.", user);
         }else{
-            response = new Response(false, "User was not found",null);
+            response = new Response(false, "User was not found.",null);
         }
         return response;
     }
