@@ -11,7 +11,6 @@ import javax.servlet.http.HttpSession;
 import java.util.List;
 
 @RestController("userController")
-@RequestMapping(value= "api")
 @CrossOrigin(value = "http://localhost:4200/", allowCredentials = "true")
 public class UserController {
 
