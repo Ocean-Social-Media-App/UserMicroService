@@ -45,6 +45,9 @@ public class User {
     @Column(name = "proPicUrl")
     private String proPicUrl;
 
+    @Column(name = "user_last_notification")
+    private Long lastNotification;
+
     //constructor for login
     public User(String username, String password) {
         this.username = username;
