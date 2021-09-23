@@ -185,5 +185,88 @@ public class UserController {
             return response;
         }
     }
+
+    @PostMapping("follow/{userId}")
+    public Response follow(HttpServletRequest req, @PathVariable Integer userId){
+        User user = (User) req.getSession().getAttribute("loggedInUser");
+        int id = user.getUserId();
+        Response response;
+        if(user == null){
+            response = new Response(false, "User not found", null);
+            return response;
+        }else if( user.getUserId() == userId){
+            response = new Response(false, "You cannot follow youself", null);
+            return response;
+        }else{
+            Set<Integer> followers = this.userService.follow(id,userId);
+            if (followers != null) {
+                response = new Response(true, "follow success.", followers);
+            } else {
+                response = new Response(false, "cannot follow.", null);
+            }
+            return response;
+        }
+    }
+
+    @DeleteMapping("follow/{userId}")
+    public Response unfollow(HttpServletRequest req, @PathVariable Integer userId){
+        User user = (User) req.getSession().getAttribute("loggedInUser");
+        int id = user.getUserId();
+        Response response;
+        if(user == null){
+            response = new Response(false, "User not found", null);
+            return response;
+        }else if( user.getUserId() == userId) {
+            response = new Response(false, "You cannot unfollow youself", null);
+            return response;
+        }else if( !user.getUser_following().contains(userId)){
+            response = new Response(false, "you are not following this user.", null);
+            return response;
+        }else{
+            Set<Integer> followers = this.userService.unfollow(id,userId);
+            if (followers != null) {
+                response = new Response(true, "unfollow success.", followers);
+            } else {
+                response = new Response(false, "you are not following this user.", null);
+            }
+            return response;
+        }
+    }
+
+    @GetMapping("follower")
+    public Response getfollowers(HttpServletRequest req){
+        User user = (User) req.getSession().getAttribute("loggedInUser");
+        Response response;
+        if(user != null) {
+            Set<Integer> followers = this.userService.getFollowers(user.getUserId());
+            if (followers != null) {
+                response = new Response(true, "Followers obtained.", followers);
+            } else {
+                response = new Response(false, "Followers not found.", null);
+            }
+            return response;
+        }else{
+            response = new Response(false,"User not found",null);
+            return response;
+        }
+    }
+
+    @GetMapping("follow")
+    public Response getfollowings(HttpServletRequest req){
+        User user = (User) req.getSession().getAttribute("loggedInUser");
+        Response response;
+        if(user != null) {
+            Set<Integer> followings = this.userService.getFollowing(user.getUserId());
+            if (followings != null) {
+                response = new Response(true, "Following users obtained.", followings);
+            } else {
+                response = new Response(false, "Following users not found.", null);
+            }
+            return response;
+        }else{
+            response = new Response(false,"User not found",null);
+            return response;
+        }
+    }
 }
 
