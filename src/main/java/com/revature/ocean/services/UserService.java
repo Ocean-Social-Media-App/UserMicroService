@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Service("userService")
 public class UserService {
@@ -93,15 +94,20 @@ public class UserService {
         return users;
     }
 
-    /*public HashSet<Integer> getBookmarks(Integer userId){
-        return this.userDao.findBookmarks(userId);
-    }
-
-    public HashSet<Integer> setBookmark(Integer userId, Integer postId){
-        return this.userDao.setBookmark(userId, postId);
+//    public HashSet<Integer> getBookmarks(Integer userId){
+//        return this.userDao.findBookmarks(userId);
+//    }
+//
+    public Set<Integer> setBookmark(Integer userId, Integer postId){
+        User user = this.userDao.findById(userId).orElse(null);
+        Set<Integer> bookmarks = user.getBookmarks();
+        bookmarks.add(postId);
+        user.setBookmarks(bookmarks);
+        this.userDao.save(user);
+        return bookmarks;
     }
     //David: Testing if I can commit and add things
-    public HashSet<Integer> removeBookmark(Integer userId, Integer postId){
-        return this.userDao.removeBookmark(userId, postId);
-    }*/
+//    public HashSet<Integer> removeBookmark(Integer userId, Integer postId){
+//        return this.userDao.removeBookmark(userId, postId);
+//    }
 }

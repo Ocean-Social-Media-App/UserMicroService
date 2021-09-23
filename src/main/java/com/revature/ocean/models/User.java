@@ -50,8 +50,8 @@ public class User {
     @Column(name = "user_last_notification")
     private Long lastNotification;
 
-    /*@Column(name = "user_bookmark", unique = true)
-    private Set<Integer> bookmarks;*/
+    @ElementCollection
+    private Set<Integer> bookmarks;
 
     //constructor for login
     public User(String username, String password) {

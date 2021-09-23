@@ -28,7 +28,7 @@ public class NotificationController {
 
     @GetMapping("notification-preview")
     public Response getPreviewNotification(HttpServletRequest req) {
-        User user = (User) req.getSession().getAttribute("User");
+        User user = (User) req.getSession().getAttribute("loggedInUser");
         if (user == null)
             return new Response(false, "Session not found", null);
         List<Notification> notifications = notificationService.getTop10NotificationByUserID(user.getUserId());
@@ -40,7 +40,7 @@ public class NotificationController {
 
     @GetMapping("notification")
     public Response getAllNotification(HttpServletRequest req) {
-        User user = (User) req.getSession().getAttribute("User");
+        User user = (User) req.getSession().getAttribute("loggedInUser");
         if (user == null)
             return new Response(false, "Session not found", null);
         List<Notification> notifications = notificationService.getNotificationByUserID(user.getUserId());

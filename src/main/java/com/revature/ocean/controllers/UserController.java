@@ -7,6 +7,7 @@ import com.revature.ocean.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.util.List;
 import java.util.Set;
@@ -41,7 +42,7 @@ public class UserController {
         Response response;
         User tempUser = this.userService.login(user);
         if (tempUser != null) {
-            session.setAttribute("loggedInUser", user);
+            session.setAttribute("loggedInUser", tempUser);
             tempUser.setPassword(null);
             response = new Response(true, "Logged in and session created.", tempUser);
         } else {
@@ -128,43 +129,49 @@ public class UserController {
         return response;
     }
 
-    /*@GetMapping("bookmark/{userId}")
-    public Response getBookmarks(@PathVariable Integer userId){
+//    @GetMapping("bookmark/{userId}")
+//    public Response getBookmarks(@PathVariable Integer userId){
+//        Response response;
+//        Set<Integer> bookmarks = this.userService.getBookmarks(userId);
+//
+//        if(bookmarks != null){
+//            response = new Response(true, "Bookmarks obtained.", bookmarks);
+//        }else{
+//            response = new Response(false, "Bookmarks not found.",null);
+//        }
+//        return response;
+//    }
+//
+    @PostMapping("bookmark/{postId}")
+    public Response setBookmark(HttpServletRequest req, @PathVariable Integer postId){
+        User user = (User) req.getSession().getAttribute("loggedInUser");
         Response response;
-        Set<Integer> bookmarks = this.userService.getBookmarks(userId);
+        if(user != null) {
+            Set<Integer> bookmarks = this.userService.setBookmark(user.getUserId(), postId);
 
-        if(bookmarks != null){
-            response = new Response(true, "Bookmarks obtained.", bookmarks);
+            if (bookmarks != null) {
+                response = new Response(true, "Bookmark set.", bookmarks);
+            } else {
+                response = new Response(false, "Bookmark not set.", null);
+            }
+            return response;
         }else{
-            response = new Response(false, "Bookmarks not found.",null);
+            response = new Response(false,"User not found",null);
+            return response;
         }
-        return response;
     }
 
-    @PostMapping("bookmark/{userId}")
-    public Response setBookmark(@PathVariable Integer userId, @PathVariable Integer postId){
-        Response response;
-        Set<Integer> bookmarks = this.userService.setBookmark(userId, postId);
-
-        if(bookmarks != null){
-            response = new Response(true, "Bookmark set.", bookmarks);
-        }else{
-            response = new Response(false, "Bookmark not set.",null);
-        }
-        return response;
-    }
-
-    @DeleteMapping("bookmark/{userId}")
-    public Response removeBookmark(@PathVariable Integer userId, @PathVariable Integer postId){
-        Response response;
-        Set<Integer> bookmarks = this.userService.removeBookmark(userId, postId);
-
-        if(bookmarks != null){
-            response = new Response(true, "Bookmark removed.", bookmarks);
-        }else{
-            response = new Response(false, "Bookmark not removed.",null);
-        }
-        return response;
-    }*/
+//    @DeleteMapping("bookmark/{userId}")
+//    public Response removeBookmark(@PathVariable Integer userId, @PathVariable Integer postId){
+//        Response response;
+//        Set<Integer> bookmarks = this.userService.removeBookmark(userId, postId);
+//
+//        if(bookmarks != null){
+//            response = new Response(true, "Bookmark removed.", bookmarks);
+//        }else{
+//            response = new Response(false, "Bookmark not removed.",null);
+//        }
+//        return response;
+//    }
 }
 

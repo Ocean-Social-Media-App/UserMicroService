@@ -6,13 +6,11 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.HashSet;
+import java.util.Set;
 
 @Repository("userDao")
 @Transactional
 public interface UserDao extends JpaRepository<User, Integer> {
     //Find user by username
     User findUserByUsername(String username);
-    /*HashSet<Integer> findBookmarks(Integer userId);
-    HashSet<Integer> setBookmark(Integer userId, Integer postId);
-    HashSet<Integer> removeBookmark(Integer userId, Integer postId);*/
 }
