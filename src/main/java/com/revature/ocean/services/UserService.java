@@ -117,4 +117,28 @@ public class UserService {
         this.userDao.save(user);
         return bookmarks;
     }
+
+    public Set<Integer> getFollowers(Integer userId){
+        User user = this.userDao.findById(userId).orElse(null);
+        Set<Integer> bookmarks = user.getBookmarks();
+        return bookmarks;
+    }
+
+    public Set<Integer> setFollowers(Integer userId){
+        User user = this.userDao.findById(userId).orElse(null);
+        Set<Integer> followers = user.getFollowers();
+        followers.add(user.getUserId());
+        user.setFollowers(followers);
+        this.userDao.save(user);
+        return followers;
+    }
+
+    public Set<Integer> removeFollowers(Integer userId){
+        User user = this.userDao.findById(userId).orElse(null);
+        Set<Integer> followers = user.getFollowers();
+        followers.add(userId);
+        user.setFollowers(followers);
+        this.userDao.save(user);
+        return followers;
+    }
 }

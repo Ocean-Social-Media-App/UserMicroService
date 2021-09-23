@@ -53,6 +53,9 @@ public class User {
     @ElementCollection
     private Set<Integer> bookmarks;
 
+    @ElementCollection
+    private Set<Integer> followers;
+
     //constructor for login
     public User(String username, String password) {
         this.username = username;

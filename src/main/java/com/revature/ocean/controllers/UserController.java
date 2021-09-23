@@ -185,5 +185,62 @@ public class UserController {
             return response;
         }
     }
+
+    @GetMapping("followers")
+    public Response getFollowers(HttpServletRequest req){
+        User user = (User) req.getSession().getAttribute("loggedInUser");
+        Response response;
+        if(user != null) {
+            Set<Integer> followers = this.userService.getFollowers(user.getUserId());
+
+            if (followers != null) {
+                response = new Response(true, "Followers obtained.", followers);
+            } else {
+                response = new Response(false, "Followers not found.", null);
+            }
+            return response;
+        }else{
+            response = new Response(false,"User not found",null);
+            return response;
+        }
+    }
+    //
+    @PostMapping("followers/{userId}")
+    public Response setFollowers(HttpServletRequest req, @PathVariable Integer userId){
+        User user = (User) req.getSession().getAttribute("loggedInUser");
+        Response response;
+        if(user != null) {
+            Set<Integer> followers = this.userService.setFollowers(userId);
+
+            if (followers != null) {
+                response = new Response(true, "Following user #: "+userId, followers);
+            } else {
+                response = new Response(false, "Unable to follow that user.", null);
+            }
+            return response;
+        }else{
+            response = new Response(false,"User not found",null);
+            return response;
+        }
+    }
+
+    @DeleteMapping("followers/{userId}")
+    public Response removeFollowers(HttpServletRequest req, @PathVariable Integer userId) {
+        User user = (User) req.getSession().getAttribute("loggedInUser");
+        Response response;
+        if (user != null) {
+            Set<Integer> followers = this.userService.removeFollowers(userId);
+
+            if (followers != null) {
+                response = new Response(true, "Unfollowing user #: "+userId, followers);
+            } else {
+                response = new Response(false, "Can't unfollow the user, try again.", null);
+            }
+            return response;
+        } else {
+            response = new Response(false, "User not found", null);
+            return response;
+        }
+    }
 }
 
