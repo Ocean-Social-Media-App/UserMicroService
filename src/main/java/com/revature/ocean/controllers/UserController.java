@@ -218,8 +218,9 @@ public class UserController {
         User user = (User) req.getSession().getAttribute("loggedInUser");
         int id = user.getUserId();
         Response response;
-        boolean isFollowing = user.getUser_following().contains(userId);
-//        System.out.println("Is following: " + isFollowing);
+        Set<Integer> followings = this.userService.getFollowing(user.getUserId());
+        boolean isFollowing = followings.contains(userId);
+        System.out.println("Is following: " + isFollowing);
         if (user == null) {
             response = new Response(false, "User not found", null);
             return response;
