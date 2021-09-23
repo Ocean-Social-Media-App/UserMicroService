@@ -218,13 +218,15 @@ public class UserController {
         User user = (User) req.getSession().getAttribute("loggedInUser");
         int id = user.getUserId();
         Response response;
+        boolean isFollowing = user.getUser_following().contains(userId);
+//        System.out.println("Is following: " + isFollowing);
         if (user == null) {
             response = new Response(false, "User not found", null);
             return response;
         } else if (user.getUserId() == userId) {
             response = new Response(false, "You cannot unfollow youself", null);
             return response;
-        } else if (!user.getUser_following().contains(userId)) {
+        } else if (!isFollowing) {
             response = new Response(false, "you are not following this user.", null);
             return response;
         } else {
