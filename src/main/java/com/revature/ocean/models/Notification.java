@@ -28,7 +28,7 @@ public class Notification {
     private Long timestamp;
 
     @ManyToOne(cascade = CascadeType.ALL)
-    @JsonIgnore
+    //@JsonIgnore
     private User user;
 
    /* @ManyToOne(cascade = CascadeType.ALL)
