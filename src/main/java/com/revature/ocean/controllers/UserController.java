@@ -41,7 +41,7 @@ public class UserController {
         Response response;
         User tempUser = this.userService.login(user);
         if (tempUser != null) {
-            session.setAttribute("loggedInUser", user);
+            session.setAttribute("loggedInUser", tempUser);
             tempUser.setPassword(null);
             response = new Response(true, "Logged in and session created.", tempUser);
         } else {
