@@ -118,6 +118,7 @@ public class UserService {
         return bookmarks;
     }
 
+
     public Set<Integer> follow(Integer userId, Integer followingID){
         User user = this.userDao.findById(userId).orElse(null);
         Set<Integer> following = user.getUser_following();
@@ -144,14 +145,18 @@ public class UserService {
         return following;
     }
 
-    public Set<Integer> getFollowers(Integer userId){
-        User user = this.userDao.findById(userId).orElse(null);
-        return user.getFollowers();
-    }
 
     public Set<Integer> getFollowing(Integer userId){
         User user = this.userDao.findById(userId).orElse(null);
         return user.getUser_following();
     }
+
+
+    public Set<Integer> getFollowers(Integer userId){
+        User user = this.userDao.findById(userId).orElse(null);
+        return user.getFollowers();
+    }
+
+
 
 }

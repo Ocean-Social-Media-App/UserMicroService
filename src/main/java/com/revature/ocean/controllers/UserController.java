@@ -20,17 +20,20 @@ public class UserController {
     private EmailService emailService;
 
     @Autowired
-    public UserController(UserService userService, EmailService emailService){ this.userService = userService; this.emailService = emailService;}
+    public UserController(UserService userService, EmailService emailService) {
+        this.userService = userService;
+        this.emailService = emailService;
+    }
 
     //Creates a Session for the user logged in
     @GetMapping("check-session")
-    public Response checkSession(HttpSession session){
+    public Response checkSession(HttpSession session) {
         Response response;
         User user = (User) session.getAttribute("loggedInUser");
-        if(user != null){
+        if (user != null) {
             user.setPassword(null);
-            response = new Response(true,"Session found.", user);
-        }else{
+            response = new Response(true, "Session found.", user);
+        } else {
             response = new Response(false, "No session found.", null);
         }
         return response;
@@ -38,7 +41,7 @@ public class UserController {
 
     //Checks to see if user is in database other wise it'll reject their log in
     @PostMapping("login")
-    public Response login (HttpSession session, @RequestBody User user) {
+    public Response login(HttpSession session, @RequestBody User user) {
         Response response;
         User tempUser = this.userService.login(user);
         if (tempUser != null) {
@@ -46,16 +49,16 @@ public class UserController {
             tempUser.setPassword(null);
             response = new Response(true, "Logged in and session created.", tempUser);
         } else {
-            response = new Response(false, "Invalid username or password. (Remember, these are case sensitive!)",null);
+            response = new Response(false, "Invalid username or password. (Remember, these are case sensitive!)", null);
         }
         return response;
     }
 
     //Logs the user out and ends the session
     @GetMapping("logout")
-    public Response logout(HttpSession session){
+    public Response logout(HttpSession session) {
         session.setAttribute("loggedInUser", null);
-        return new Response(true,"You have logged out and session terminated", null);
+        return new Response(true, "You have logged out and session terminated", null);
     }
 
     //Creates a new user
@@ -75,10 +78,10 @@ public class UserController {
 
     //Get all users
     @GetMapping("user")
-    public Response getAllUsers(){
+    public Response getAllUsers() {
         Response response;
         List<User> allUsers = this.userService.getAllUsers();
-        if(allUsers != null){
+        if (allUsers != null) {
             response = new Response(true, "Users obtained.", allUsers);
         } else {
             response = new Response(false, "Failed to find users.", null);
@@ -88,15 +91,15 @@ public class UserController {
 
     //Checks username in database and will send them email with password
     @GetMapping("forgot/{username}")
-    public Response forGotInfo(@PathVariable String username){
+    public Response forGotInfo(@PathVariable String username) {
         Response response;
         User tempUser = this.userService.forGotInfo(username);
-        if(tempUser != null){
+        if (tempUser != null) {
             String pass = this.emailService.sendNewPassword(tempUser.getEmail(), tempUser.getFirstName());
             tempUser.setPassword(pass);
             this.userService.updateUser(tempUser);
             response = new Response(true, "An email has been sent to this account holder.", tempUser.getEmail());
-        }else{
+        } else {
             response = new Response(false, "There is no user by the username:" + username, null);
         }
         return response;
@@ -104,36 +107,36 @@ public class UserController {
 
     //Will update the profile of this user
     @PutMapping("updateUser")
-    public Response updateUser(@RequestBody User user){
+    public Response updateUser(@RequestBody User user) {
         Response response;
         User updateUser = this.userService.updateUser(user);
-        if(updateUser == user){
+        if (updateUser == user) {
             user.setPassword(null);
-            return new Response(true,"Profile has been updated.",user);
-        }else{
-            return new Response(false,"Profile has not been updated.", null);
+            return new Response(true, "Profile has been updated.", user);
+        } else {
+            return new Response(false, "Profile has not been updated.", null);
         }
     }
 
     //Will get user with matching Id
     @GetMapping("user/{id}")
-    public Response getUserById(@PathVariable Integer id){
+    public Response getUserById(@PathVariable Integer id) {
         Response response;
         User user = (User) this.userService.getUserById(id);
-        if(user != null){
+        if (user != null) {
             user.setPassword(null);
             response = new Response(true, "User obtained.", user);
-        }else{
-            response = new Response(false, "User was not found.",null);
+        } else {
+            response = new Response(false, "User was not found.", null);
         }
         return response;
     }
 
     @GetMapping("bookmark")
-    public Response getBookmarks(HttpServletRequest req){
+    public Response getBookmarks(HttpServletRequest req) {
         User user = (User) req.getSession().getAttribute("loggedInUser");
         Response response;
-        if(user != null) {
+        if (user != null) {
             Set<Integer> bookmarks = this.userService.getBookmarks(user.getUserId());
 
             if (bookmarks != null) {
@@ -142,17 +145,18 @@ public class UserController {
                 response = new Response(false, "Bookmarks not found.", null);
             }
             return response;
-        }else{
-            response = new Response(false,"User not found",null);
+        } else {
+            response = new Response(false, "User not found", null);
             return response;
         }
     }
-//
+
+    //
     @PostMapping("bookmark/{postId}")
-    public Response setBookmark(HttpServletRequest req, @PathVariable Integer postId){
+    public Response setBookmark(HttpServletRequest req, @PathVariable Integer postId) {
         User user = (User) req.getSession().getAttribute("loggedInUser");
         Response response;
-        if(user != null) {
+        if (user != null) {
             Set<Integer> bookmarks = this.userService.setBookmark(user.getUserId(), postId);
 
             if (bookmarks != null) {
@@ -161,8 +165,8 @@ public class UserController {
                 response = new Response(false, "Bookmark not set.", null);
             }
             return response;
-        }else{
-            response = new Response(false,"User not found",null);
+        } else {
+            response = new Response(false, "User not found", null);
             return response;
         }
     }
@@ -186,19 +190,20 @@ public class UserController {
         }
     }
 
+
     @PostMapping("follow/{userId}")
-    public Response follow(HttpServletRequest req, @PathVariable Integer userId){
+    public Response follow(HttpServletRequest req, @PathVariable Integer userId) {
         User user = (User) req.getSession().getAttribute("loggedInUser");
         int id = user.getUserId();
         Response response;
-        if(user == null){
+        if (user == null) {
             response = new Response(false, "User not found", null);
             return response;
-        }else if( user.getUserId() == userId){
+        } else if (user.getUserId() == userId) {
             response = new Response(false, "You cannot follow youself", null);
             return response;
-        }else{
-            Set<Integer> followers = this.userService.follow(id,userId);
+        } else {
+            Set<Integer> followers = this.userService.follow(id, userId);
             if (followers != null) {
                 response = new Response(true, "follow success.", followers);
             } else {
@@ -209,21 +214,21 @@ public class UserController {
     }
 
     @DeleteMapping("follow/{userId}")
-    public Response unfollow(HttpServletRequest req, @PathVariable Integer userId){
+    public Response unfollow(HttpServletRequest req, @PathVariable Integer userId) {
         User user = (User) req.getSession().getAttribute("loggedInUser");
         int id = user.getUserId();
         Response response;
-        if(user == null){
+        if (user == null) {
             response = new Response(false, "User not found", null);
             return response;
-        }else if( user.getUserId() == userId) {
+        } else if (user.getUserId() == userId) {
             response = new Response(false, "You cannot unfollow youself", null);
             return response;
-        }else if( !user.getUser_following().contains(userId)){
+        } else if (!user.getUser_following().contains(userId)) {
             response = new Response(false, "you are not following this user.", null);
             return response;
-        }else{
-            Set<Integer> followers = this.userService.unfollow(id,userId);
+        } else {
+            Set<Integer> followers = this.userService.unfollow(id, userId);
             if (followers != null) {
                 response = new Response(true, "unfollow success.", followers);
             } else {
@@ -234,39 +239,45 @@ public class UserController {
     }
 
     @GetMapping("follower")
-    public Response getfollowers(HttpServletRequest req){
+    public Response getfollowers(HttpServletRequest req) {
         User user = (User) req.getSession().getAttribute("loggedInUser");
         Response response;
-        if(user != null) {
+        if (user != null) {
             Set<Integer> followers = this.userService.getFollowers(user.getUserId());
             if (followers != null) {
                 response = new Response(true, "Followers obtained.", followers);
             } else {
                 response = new Response(false, "Followers not found.", null);
+
             }
             return response;
         }else{
-            response = new Response(false,"User not found",null);
+            response = new Response(false, "User not found", null);
             return response;
         }
+
     }
 
     @GetMapping("follow")
-    public Response getfollowings(HttpServletRequest req){
+    public Response getfollowing(HttpServletRequest req) {
         User user = (User) req.getSession().getAttribute("loggedInUser");
         Response response;
-        if(user != null) {
-            Set<Integer> followings = this.userService.getFollowing(user.getUserId());
-            if (followings != null) {
-                response = new Response(true, "Following users obtained.", followings);
+        if (user != null) {
+            Set<Integer> followers = this.userService.getFollowing(user.getUserId());
+            if (followers != null) {
+                response = new Response(true, "Following obtained.", followers);
             } else {
-                response = new Response(false, "Following users not found.", null);
+                response = new Response(false, "Following not found.", null);
+
             }
             return response;
         }else{
-            response = new Response(false,"User not found",null);
+            response = new Response(false, "User not found", null);
             return response;
         }
+
     }
 }
+
+
 
