@@ -94,10 +94,12 @@ public class UserService {
         return users;
     }
 
-//    public HashSet<Integer> getBookmarks(Integer userId){
-//        return this.userDao.findBookmarks(userId);
-//    }
-//
+    public Set<Integer> getBookmarks(Integer userId){
+        User user = this.userDao.findById(userId).orElse(null);
+        Set<Integer> bookmarks = user.getBookmarks();
+        return bookmarks;
+    }
+
     public Set<Integer> setBookmark(Integer userId, Integer postId){
         User user = this.userDao.findById(userId).orElse(null);
         Set<Integer> bookmarks = user.getBookmarks();
@@ -107,7 +109,12 @@ public class UserService {
         return bookmarks;
     }
     //David: Testing if I can commit and add things
-//    public HashSet<Integer> removeBookmark(Integer userId, Integer postId){
-//        return this.userDao.removeBookmark(userId, postId);
-//    }
+    public Set<Integer> removeBookmark(Integer userId, Integer postId){
+        User user = this.userDao.findById(userId).orElse(null);
+        Set<Integer> bookmarks = user.getBookmarks();
+        bookmarks.remove(postId);
+        user.setBookmarks(bookmarks);
+        this.userDao.save(user);
+        return bookmarks;
+    }
 }
