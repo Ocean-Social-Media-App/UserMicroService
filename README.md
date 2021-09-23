@@ -2,6 +2,7 @@
 /* Team Members */
 * David Burton
 * Kevin Dian
+* Milo Cao
 * Roel Cordua
 * Tommy Arnette
 
