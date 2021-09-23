@@ -35,8 +35,8 @@ public class Notification {
     @JsonIgnore
     private Feed feed;*/
 
-    @Transient
-    private Integer feedID;
+   /* @Transient
+    private Integer feedID;*/
 
     @Transient
     private Response response;

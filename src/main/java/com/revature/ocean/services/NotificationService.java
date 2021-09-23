@@ -32,7 +32,7 @@ public class NotificationService {
     public List<Notification> getTop10NotificationByUserID(Integer userID) {
         User user = userDao.findById(userID).orElse(null);
         if (user == null) return null;
-        List<Notification> notifications = notificationDao.findTop10ByFeedAuthorOrderByTimestampDesc(user);
+        List<Notification> notifications = notificationDao.findTop10ByUserOrderByTimestampDesc(user);
         notifications.forEach(NotificationService::format);
         user.setLastNotification(System.currentTimeMillis());
         userDao.save(user);
@@ -42,7 +42,7 @@ public class NotificationService {
     public List<Notification> getNotificationByUserID(Integer userID) {
         User user = userDao.findById(userID).orElse(null);
         if (user == null) return null;
-        List<Notification> notifications = notificationDao.findByFeedAuthorOrderByTimestampDesc(user);
+        List<Notification> notifications = notificationDao.findByUserOrderByTimestampDesc(user);
         notifications.forEach(NotificationService::format);
         user.setLastNotification(System.currentTimeMillis());
         userDao.save(user);

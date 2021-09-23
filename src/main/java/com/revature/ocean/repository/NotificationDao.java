@@ -14,6 +14,6 @@ import java.util.List;
 @Repository("NotificationDao")
 @Transactional
 public interface NotificationDao extends JpaRepository<Notification, Integer> {
-    List<Notification> findTop10ByFeedAuthorOrderByTimestampDesc(User user);
-    List<Notification> findByFeedAuthorOrderByTimestampDesc(User user);
+    List<Notification> findTop10ByUserOrderByTimestampDesc(User user);
+    List<Notification> findByUserOrderByTimestampDesc(User user);
 }

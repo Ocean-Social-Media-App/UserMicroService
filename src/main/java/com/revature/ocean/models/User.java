@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.util.Date;
+import java.util.Map;
 import java.util.Set;
 
 @Data
@@ -49,8 +50,8 @@ public class User {
     @Column(name = "user_last_notification")
     private Long lastNotification;
 
-    @Column(name = "user_bookmark", unique = true)
-    private Set<Integer> bookmarks;
+    /*@Column(name = "user_bookmark", unique = true)
+    private Set<Integer> bookmarks;*/
 
     //constructor for login
     public User(String username, String password) {

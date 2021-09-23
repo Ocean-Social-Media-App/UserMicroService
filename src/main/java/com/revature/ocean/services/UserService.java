@@ -93,7 +93,7 @@ public class UserService {
         return users;
     }
 
-    public HashSet<Integer> getBookmarks(Integer userId){
+    /*public HashSet<Integer> getBookmarks(Integer userId){
         return this.userDao.findBookmarks(userId);
     }
 
@@ -103,5 +103,5 @@ public class UserService {
     //David: Testing if I can commit and add things
     public HashSet<Integer> removeBookmark(Integer userId, Integer postId){
         return this.userDao.removeBookmark(userId, postId);
-    }
+    }*/
 }

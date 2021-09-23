@@ -128,7 +128,7 @@ public class UserController {
         return response;
     }
 
-    @GetMapping("bookmark/{userId}")
+    /*@GetMapping("bookmark/{userId}")
     public Response getBookmarks(@PathVariable Integer userId){
         Response response;
         Set<Integer> bookmarks = this.userService.getBookmarks(userId);
@@ -165,6 +165,6 @@ public class UserController {
             response = new Response(false, "Bookmark not removed.",null);
         }
         return response;
-    }
+    }*/
 }
 

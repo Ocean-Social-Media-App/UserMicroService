@@ -12,7 +12,7 @@ import java.util.HashSet;
 public interface UserDao extends JpaRepository<User, Integer> {
     //Find user by username
     User findUserByUsername(String username);
-    HashSet<Integer> findBookmarks(Integer userId);
+    /*HashSet<Integer> findBookmarks(Integer userId);
     HashSet<Integer> setBookmark(Integer userId, Integer postId);
-    HashSet<Integer> removeBookmark(Integer userId, Integer postId);
+    HashSet<Integer> removeBookmark(Integer userId, Integer postId);*/
 }
