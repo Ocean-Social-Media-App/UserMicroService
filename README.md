@@ -1,11 +1,8 @@
 # UserMicroService
 
 ## To Do
-* Password Encryption (Bcrypt)
-* Session Management
-* User Bookmarks (set/get bookmarks)
-* Followers/Following
-* Notifications
+* Session Management (using JWT)
+* Notifications (using RabbitMQ)
 
 # Ocean Social Media App
 Revature social network application to connect and interact with friends
