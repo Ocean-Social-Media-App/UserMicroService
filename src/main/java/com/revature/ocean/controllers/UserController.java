@@ -1,9 +1,11 @@
 package com.revature.ocean.controllers;
 
+import com.auth0.jwt.interfaces.DecodedJWT;
 import com.revature.ocean.models.Response;
 import com.revature.ocean.models.User;
 import com.revature.ocean.services.EmailService;
 import com.revature.ocean.services.UserService;
+import com.revature.ocean.utility.JwtUtility;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -11,6 +13,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.util.List;
 import java.util.Set;
+import java.util.Map;
 
 @RestController("userController")
 @CrossOrigin(value = "http://localhost:4200/", allowCredentials = "true")
@@ -18,11 +21,13 @@ public class UserController {
 
     private UserService userService;
     private EmailService emailService;
+    private JwtUtility jwtUtility;
 
     @Autowired
-    public UserController(UserService userService, EmailService emailService) {
+    public UserController(UserService userService, EmailService emailService, JwtUtility jwtUtility) {
         this.userService = userService;
         this.emailService = emailService;
+        this.jwtUtility = jwtUtility;
     }
 
     //Creates a Session for the user logged in
@@ -41,13 +46,13 @@ public class UserController {
 
     //Checks to see if user is in database other wise it'll reject their log in
     @PostMapping("login")
-    public Response login(HttpSession session, @RequestBody User user) {
+    public Response login(@RequestBody User user) {
         Response response;
+
         User tempUser = this.userService.login(user);
         if (tempUser != null) {
-            session.setAttribute("loggedInUser", tempUser);
-            tempUser.setPassword(null);
-            response = new Response(true, "Logged in and session created.", tempUser);
+            //session.setAttribute("loggedInUser", tempUser);
+            response = new Response(true, "Logged in and session created.", jwtUtility.genToken(tempUser.getUserId()));
         } else {
             response = new Response(false, "Invalid username or password. (Remember, these are case sensitive!)", null);
         }
@@ -107,15 +112,29 @@ public class UserController {
 
     //Will update the profile of this user
     @PutMapping("updateUser")
-    public Response updateUser(@RequestBody User user) {
+    public Response updateUser(@RequestBody User user, @RequestHeader Map<String, String> headers) {
         Response response;
-        User updateUser = this.userService.updateUser(user);
-        if (updateUser == user) {
-            user.setPassword(null);
-            return new Response(true, "Profile has been updated.", user);
-        } else {
-            return new Response(false, "Profile has not been updated.", null);
+
+        DecodedJWT decoded = jwtUtility.verify(headers.get("jwt"));
+        if(decoded == null) {
+            return new Response(false, "Invalid Token, try again.", null);
         }
+        else{
+            if(decoded.getClaims().get("userId").asInt() == user.getUserId()) {
+                User updateUser = this.userService.updateUser(user);
+                if (updateUser == user) {
+                    user.setPassword(null);
+                    response = new Response(true, "Token found. Profile has been updated.", user);
+                } else {
+                    response = new Response(false, "Cannot update.", null);
+                }
+            }
+            else{
+                return new Response(false, "Invalid Token, try again.", null);
+            }
+        }
+
+        return response;
     }
 
     //Will get user with matching Id
