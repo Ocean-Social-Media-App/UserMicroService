@@ -204,22 +204,36 @@ public class UserController {
         }
     }
 
-    @DeleteMapping("bookmark/{postId}")
-    public Response removeBookmark(HttpServletRequest req, @PathVariable Integer postId) {
-        User user = (User) req.getSession().getAttribute("loggedInUser");
-        Response response;
-        if (user != null) {
-            Set<Integer> bookmarks = this.userService.removeBookmark(user.getUserId(), postId);
+    @DeleteMapping("bookmark/{userId}")
+    public Response removeBookmark(@PathVariable Integer userId, @RequestBody Integer postId, @RequestHeader Map<String, String> headers) {
+        //User user = (User) req.getSession().getAttribute("loggedInUser");
 
-            if (bookmarks != null) {
-                response = new Response(true, "Bookmark removed.", bookmarks);
-            } else {
-                response = new Response(false, "Bookmark not found.", null);
+        Response response;
+        DecodedJWT decoded = jwtUtility.verify(headers.get("authorization"));
+
+        if(decoded == null) {
+            return new Response(false, "Invalid Token, try again.", null);
+        }
+        else {
+            if(decoded.getClaims().get("userId").asInt() == userId) {
+                User user = userService.getUserById(userId);
+                if (user != null) {
+                    Set<Integer> bookmarks = this.userService.removeBookmark(user.getUserId(), postId);
+
+                    if (bookmarks != null) {
+                        response = new Response(true, "Bookmark removed.", bookmarks);
+                    } else {
+                        response = new Response(false, "Bookmark not found.", null);
+                    }
+                    return response;
+                } else {
+                    response = new Response(false, "User not found", null);
+                    return response;
+                }
             }
-            return response;
-        } else {
-            response = new Response(false, "User not found", null);
-            return response;
+            else{
+                return new Response(false, "Invalid Token, try again.", null);
+            }
         }
     }
 
