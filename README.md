@@ -1,4 +1,4 @@
-# UserMicroService
+# User Microservice
 
 ## To Do
 * Session Management (using JWT)
