@@ -57,7 +57,7 @@ Fill In Member Roles
 ## Programs/Libraries used:
 
 ### BackEnd:
-* Spring MVC
+* Spring Boot
 * Hibernate
 * Java
 * Postgres
