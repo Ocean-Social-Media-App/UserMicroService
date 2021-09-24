@@ -72,17 +72,15 @@ Fill In Member Roles
     Microservice
 
 ### FrontEnd:
-
-    Angular
-    TypeScript
-    JavaScript
-    Jasmine
+* Angular
+* TypeScript
+* JavaScript
+* Jasmine
 
 ### Deployment:
-
-    AWS EC2
-    Docker
-    Jenkins
+* AWS EC2
+* Docker
+* Jenkins
 
 ## Backend Requirements
 Tests:
@@ -109,12 +107,12 @@ Register, Models, and Database
 
 |   Action        |             Endpoint                |
 |   ------        |             --------                |
-|  Login 	        |   `POST /api/user/login`            |
+|  Login 	      |   `POST /api/user/login`            |
 |  Logout 	      |   `GET /api//user/logout`           |
 |  Session        |   `GET /api/user/check-session`     |
-|  Sign Up        |   `POST /api/user/user`             |
+|  Register       |   `POST /api/user/user`             |
 |  Forgot 	      |   `GET /api/user/forgot/{username}` |
-|  Update Profile | 	`PUT /api/user/updateUser`        |
+|  Update Profile | 	`PUT /api/user/updateUser`      |
 
 ## Models (Non-finished list)
 ### User Model
