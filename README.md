@@ -59,17 +59,16 @@ Fill In Member Roles
 ## Programs/Libraries used:
 
 ### BackEnd:
-
-    Spring MVC
-    Hibernate
-    Java
-    Postgres
-    AWS EC2
-    AWS S3
-    Junit/Mockito/H2
-    Log4J
-    Javadoc
-    Microservice
+* Spring MVC
+* Hibernate
+* Java
+* Postgres
+* AWS EC2
+* AWS S3
+* Junit/Mockito
+* Log4J
+* Javadocs
+* Microservice Architecture
 
 ### FrontEnd:
 * Angular
@@ -88,22 +87,6 @@ Tests:
 * Mockito
 * Test Driven Development
 
-Hibernate:
-
-    Models
-    PostgreSQL
-
-Register, Models, and Database
-
-    Sessions
-    register- email password
-    forgot password will email them their temp pass
-    Modify info
-
-    Dummy email
-    Google interface for handling email
-    AWS S3 upload a picture- handle saving URL to database
-
 ### Backend endpoints (Non-finishedl list)
 
 |   Action        |             Endpoint                |
@@ -113,7 +96,7 @@ Register, Models, and Database
 |  Session        |   `GET /api/user/check-session`     |
 |  Register       |   `POST /api/user/user`             |
 |  Forgot 	      |   `GET /api/user/forgot/{username}` |
-|  Update Profile | 	`PUT /api/user/updateUser`      |
+|  Update Profile |   `PUT /api/user/updateUser`        |
 
 ## Models (Non-finished list)
 ### User Model
@@ -131,4 +114,26 @@ Register, Models, and Database
     Set<Integer> bookmarks
     Set<Integer> user_following
     Set<Integer> followers
+```
+### Response Model
+```
+   Boolean success
+   String message
+   Object data
+```
+### User Response Model
+```
+    Integer id
+    String name
+    String profileImage
+    Long lastNotification
+```
+### Notification Model
+```
+    Integer id: serial
+    String type
+    Long timestamp
+    User user (@ManyToOne(cascade = CascadeType.ALL))
+    Response response (@Transient)
+    UserResponse userResponse (@Transient)
 ```
