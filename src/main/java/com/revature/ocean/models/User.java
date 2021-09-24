@@ -54,6 +54,9 @@ public class User {
     private Set<Integer> bookmarks;
 
     @ElementCollection
+    private Set<Integer> user_following;
+
+    @ElementCollection
     private Set<Integer> followers;
 
     //constructor for login

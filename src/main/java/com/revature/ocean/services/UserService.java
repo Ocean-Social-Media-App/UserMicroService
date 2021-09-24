@@ -118,27 +118,45 @@ public class UserService {
         return bookmarks;
     }
 
+
+    public Set<Integer> follow(Integer userId, Integer followingID){
+        User user = this.userDao.findById(userId).orElse(null);
+        Set<Integer> following = user.getUser_following();
+        following.add(followingID);
+
+        User follow = this.userDao.findById(followingID).orElse(null);
+        Set<Integer> followers = follow.getFollowers();
+        followers.add(userId);
+        user.setUser_following(following);
+        this.userDao.save(user);
+        return following;
+    }
+
+    public Set<Integer> unfollow(Integer userId, Integer followingID){
+        User user = this.userDao.findById(userId).orElse(null);
+        Set<Integer> following = user.getUser_following();
+        following.remove(followingID);
+
+        User follow = this.userDao.findById(followingID).orElse(null);
+        Set<Integer> followers = follow.getFollowers();
+        followers.remove(userId);
+        user.setUser_following(following);
+        this.userDao.save(user);
+        return following;
+    }
+
+
+    public Set<Integer> getFollowing(Integer userId){
+        User user = this.userDao.findById(userId).orElse(null);
+        return user.getUser_following();
+    }
+
+
     public Set<Integer> getFollowers(Integer userId){
         User user = this.userDao.findById(userId).orElse(null);
-        Set<Integer> bookmarks = user.getBookmarks();
-        return bookmarks;
+        return user.getFollowers();
     }
 
-    public Set<Integer> setFollowers(Integer userId){
-        User user = this.userDao.findById(userId).orElse(null);
-        Set<Integer> followers = user.getFollowers();
-        followers.add(user.getUserId());
-        user.setFollowers(followers);
-        this.userDao.save(user);
-        return followers;
-    }
 
-    public Set<Integer> removeFollowers(Integer userId){
-        User user = this.userDao.findById(userId).orElse(null);
-        Set<Integer> followers = user.getFollowers();
-        followers.add(userId);
-        user.setFollowers(followers);
-        this.userDao.save(user);
-        return followers;
-    }
+
 }
