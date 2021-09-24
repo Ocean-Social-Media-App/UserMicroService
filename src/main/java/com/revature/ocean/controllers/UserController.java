@@ -52,7 +52,7 @@ public class UserController {
         User tempUser = this.userService.login(user);
         if (tempUser != null) {
             //session.setAttribute("loggedInUser", tempUser);
-            response = new Response(true, "Logged in and session created.", jwtUtility.genToken(tempUser.getUserId()));
+            response = new Response(true, jwtUtility.genToken(tempUser.getUserId()),tempUser);
         } else {
             response = new Response(false, "Invalid username or password. (Remember, these are case sensitive!)", null);
         }
@@ -115,7 +115,7 @@ public class UserController {
     public Response updateUser(@RequestBody User user, @RequestHeader Map<String, String> headers) {
         Response response;
 
-        DecodedJWT decoded = jwtUtility.verify(headers.get("jwt"));
+        DecodedJWT decoded = jwtUtility.verify(headers.get("authorization"));
         if(decoded == null) {
             return new Response(false, "Invalid Token, try again.", null);
         }
@@ -171,22 +171,36 @@ public class UserController {
     }
 
     //
-    @PostMapping("bookmark/{postId}")
-    public Response setBookmark(HttpServletRequest req, @PathVariable Integer postId) {
-        User user = (User) req.getSession().getAttribute("loggedInUser");
-        Response response;
-        if (user != null) {
-            Set<Integer> bookmarks = this.userService.setBookmark(user.getUserId(), postId);
+    @PostMapping("bookmark/{userId}")
+    public Response setBookmark(@PathVariable Integer userId, @RequestBody Integer postId, @RequestHeader Map<String, String> headers) {
+        //User user = (User) req.getSession().getAttribute("loggedInUser");
 
-            if (bookmarks != null) {
-                response = new Response(true, "Bookmark set.", bookmarks);
-            } else {
-                response = new Response(false, "Bookmark not set.", null);
+        Response response;
+        DecodedJWT decoded = jwtUtility.verify(headers.get("authorization"));
+
+        if(decoded == null) {
+            return new Response(false, "Invalid Token, try again.", null);
+        }
+        else {
+            if(decoded.getClaims().get("userId").asInt() == userId) {
+                User user = userService.getUserById(userId);
+                if (user != null) {
+                    Set<Integer> bookmarks = this.userService.setBookmark(user.getUserId(), postId);
+
+                    if (bookmarks != null) {
+                        response = new Response(true, "Bookmark set.", bookmarks);
+                    } else {
+                        response = new Response(false, "Bookmark not set.", null);
+                    }
+                    return response;
+                } else {
+                    response = new Response(false, "User not found", null);
+                    return response;
+                }
             }
-            return response;
-        } else {
-            response = new Response(false, "User not found", null);
-            return response;
+            else{
+                return new Response(false, "Invalid Token, try again.", null);
+            }
         }
     }
 
