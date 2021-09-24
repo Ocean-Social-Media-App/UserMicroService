@@ -241,6 +241,7 @@ public class UserController {
         }
     }
 
+    // will review for further usage
     @GetMapping("follower")
     public Response getfollowers(HttpServletRequest req) {
         User user = (User) req.getSession().getAttribute("loggedInUser");
@@ -261,12 +262,12 @@ public class UserController {
 
     }
 
-    @GetMapping("follow")
-    public Response getfollowing(HttpServletRequest req) {
-        User user = (User) req.getSession().getAttribute("loggedInUser");
+    @GetMapping("follow/{userId}")
+    public Response getfollowing(@PathVariable Integer userId) {
+        //User user = (User) req.getSession().getAttribute("loggedInUser");
         Response response;
-        if (user != null) {
-            Set<Integer> followers = this.userService.getFollowing(user.getUserId());
+        //if (user != null) {
+            Set<Integer> followers = this.userService.getFollowing(userId);
             if (followers != null) {
                 response = new Response(true, "Following obtained.", followers);
             } else {
@@ -274,10 +275,10 @@ public class UserController {
 
             }
             return response;
-        }else{
+        /*}else{
             response = new Response(false, "User not found", null);
             return response;
-        }
+        }*/
 
     }
 }
