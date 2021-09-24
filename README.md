@@ -31,27 +31,28 @@ Revature social network application to connect and interact with friends
 
 
 ## Project Parameters
-Users Can:
-
-    Register
-        Email with a welcome email.
-    Login/Logout.
-    Reset their password.
-        Email new password if they forgot password.
-    Modify their information.
-    Upload a profile picture (using AWS: S3).
-    Search other people.
-    Create a post.
-        Image(s) can be added to these posts (using AWS: S3).
-    View his own profile.
-        Including posts.
-    View others’ profile.
-        Including posts.
-    See their feed.
-        Posts of everyone should show here.
-        Pagination should be implemented (only fetching 20 posts at a time).
-    Like someone’s post.
-        Old school Facebook, only one type of like.
+### Users Can:
+* Register
+    * Receive welcome email
+* Login/Logout.
+* Reset their password.
+    * Receive email with new password
+* Modify their profile information
+* Upload a profile picture (using AWS: S3)
+* Search for other ppeople
+* Create a post
+    * Image(s) can be added to these posts (using AWS: S3)
+* Comment on posts
+    * Reply to comments
+* View their own profile (including posts)
+* View others’ profile (including their posts)
+* See their main feed
+    * Posts by people the user follows appear here
+    * Pagination should be implemented (only fetching 20 posts at a time).
+* Like/unlike someone’s post.
+* Bookmark favorite posts
+* Follow other people's accounts
+* Receive notifications when they are followed by another user (using RabbitMQ)
 
 ## Roles:
 Fill In Member Roles
