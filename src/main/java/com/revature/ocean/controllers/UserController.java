@@ -255,24 +255,42 @@ public class UserController {
 
 
     @PostMapping("follow/{userId}")
-    public Response follow(HttpServletRequest req, @PathVariable Integer userId) {
-        User user = (User) req.getSession().getAttribute("loggedInUser");
-        int id = user.getUserId();
+    public Response follow(@PathVariable Integer userId, @RequestBody Integer followUserId, @RequestHeader Map<String, String> headers) {
+        //User user = (User) req.getSession().getAttribute("loggedInUser");
+
         Response response;
-        if (user == null) {
-            response = new Response(false, "User not found", null);
-            return response;
-        } else if (user.getUserId() == userId) {
-            response = new Response(false, "You cannot follow youself", null);
-            return response;
-        } else {
-            Set<Integer> followers = this.userService.follow(id, userId);
-            if (followers != null) {
-                response = new Response(true, "follow success.", followers);
-            } else {
-                response = new Response(false, "cannot follow.", null);
+        DecodedJWT decoded = jwtUtility.verify(headers.get("authorization"));
+
+        if(decoded == null) {
+            return new Response(false, "Invalid Token, try again.", null);
+        }
+        else {
+            if(decoded.getClaims().get("userId").asInt() == userId) {
+                //User user = userService.getUserById(userId);
+                User followUser = userService.getUserById(followUserId);
+                //int id = user.getUserId();
+
+                int id = followUserId;
+
+                if (followUser == null) {
+                    response = new Response(false, "User not found", null);
+                    return response;
+                } else if (followUser.getUserId() == userId) {
+                    response = new Response(false, "You cannot follow youself", null);
+                    return response;
+                } else {
+                    Set<Integer> followers = this.userService.follow(userId, id);
+                    if (followers != null) {
+                        response = new Response(true, "follow success.", followers);
+                    } else {
+                        response = new Response(false, "cannot follow.", null);
+                    }
+                    return response;
+                }
             }
-            return response;
+            else {
+                return new Response(false, "Invalid Token, try again.", null);
+            }
         }
     }
 
