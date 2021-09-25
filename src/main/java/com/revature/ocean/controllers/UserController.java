@@ -154,22 +154,35 @@ public class UserController {
         return response;
     }
 
-    @GetMapping("bookmark")
-    public Response getBookmarks(HttpServletRequest req) {
-        User user = (User) req.getSession().getAttribute("loggedInUser");
-        Response response;
-        if (user != null) {
-            Set<Integer> bookmarks = this.userService.getBookmarks(user.getUserId());
+    @GetMapping("bookmark/{userId}")
+    public Response getBookmarks(@PathVariable Integer userId, @RequestHeader Map<String, String> headers) {
+        //User user = (User) req.getSession().getAttribute("loggedInUser");
 
-            if (bookmarks != null) {
-                response = new Response(true, "Bookmarks obtained.", bookmarks);
-            } else {
-                response = new Response(false, "Bookmarks not found.", null);
+        Response response;
+        DecodedJWT decoded = jwtUtility.verify(headers.get("authorization"));
+        if(decoded == null) {
+            return new Response(false, "Invalid Token, try again.", null);
+        }
+        else {
+            if(decoded.getClaims().get("userId").asInt() == userId) {
+                User user = userService.getUserById(userId);
+                if (user != null) {
+                    Set<Integer> bookmarks = this.userService.getBookmarks(user.getUserId());
+
+                    if (bookmarks != null) {
+                        response = new Response(true, "Bookmarks obtained.", bookmarks);
+                    } else {
+                        response = new Response(false, "Bookmarks not found.", null);
+                    }
+                    return response;
+                } else {
+                    response = new Response(false, "User not found", null);
+                    return response;
+                }
             }
-            return response;
-        } else {
-            response = new Response(false, "User not found", null);
-            return response;
+            else{
+                return new Response(false, "Invalid Token, try again.", null);
+            }
         }
     }
 
