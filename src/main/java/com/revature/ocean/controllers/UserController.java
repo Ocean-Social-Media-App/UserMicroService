@@ -15,6 +15,9 @@ import java.util.List;
 import java.util.Set;
 import java.util.Map;
 
+/**
+ * UserController controls the API endpoints associated with User methods.
+ */
 @RestController("userController")
 @CrossOrigin(value = "http://localhost:4200/", allowCredentials = "true")
 public class UserController {

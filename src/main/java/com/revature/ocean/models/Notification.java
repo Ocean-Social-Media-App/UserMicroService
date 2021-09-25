@@ -9,6 +9,9 @@ import javax.persistence.*;
 
 /**
  * @author Zimi Li
+ * Notification model used to create Notification objects.
+ * Lombok is used to reduce boilerplate code.
+ * Hibernate annotations are used to create the database table.
  */
 @NoArgsConstructor
 @AllArgsConstructor
