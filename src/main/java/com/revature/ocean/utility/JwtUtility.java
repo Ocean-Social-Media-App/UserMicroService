@@ -14,7 +14,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * @author Zimi Li
+ * @author Zimi Li, authored the logic contained within this file.
+ * This utility class specifies the data associated with the JSON Web Token authorization service.
  */
 @Component
 public class JwtUtility {
@@ -23,6 +24,11 @@ public class JwtUtility {
     public static final JWTVerifier verifier = JWT.require(algorithm).build();
     public static final Integer timeLength = 60*60*1000;
 
+    /**
+     * Method used to generate the token that will be passed to the front end to validate the user
+     * @param userId    user ID for the user being assigned the JWT
+     * @return          returns a string representing the JWT
+     */
     public String genToken(Integer userId) {
         try {
 //            Map<String, String> payloads = new HashMap<>();
@@ -39,6 +45,11 @@ public class JwtUtility {
         return null;
     }
 
+    /**
+     * Used to decode the JWT and verify the token matches
+     * @param token     the token created from the genToken method is passed to this method for decoding
+     * @return          returns a DecodedJWT object
+     */
     public DecodedJWT verify(String token) {
         try {
             return verifier.verify(token);

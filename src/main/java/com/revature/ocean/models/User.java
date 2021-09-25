@@ -10,6 +10,11 @@ import java.util.Date;
 import java.util.Map;
 import java.util.Set;
 
+/**
+ * User model used to create User objects.
+ * Lombok is used to reduce boilerplate code.
+ * Hibernate annotations are used to create the database table.
+ */
 @Data
 @NoArgsConstructor
 @AllArgsConstructor

@@ -6,6 +6,9 @@ import lombok.NoArgsConstructor;
 
 /**
  * @author Zimi Li
+ *
+ * UserResponse model used to create UserResponse objects.
+ * Lombok is used to reduce boilerplate code.
  */
 
 @NoArgsConstructor

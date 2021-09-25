@@ -12,6 +12,9 @@ import java.util.List;
 
 /**
  * @author Zimi Li
+ *
+ * The notification service sends data associated with a notification that a user would receive when using
+ * the Ocean social networking app. Users will receive a notification when another user follows their account.
  */
 @Service("NotificationService")
 public class NotificationService {
@@ -24,11 +27,22 @@ public class NotificationService {
         this.userDao = userDao;
     }
 
+    /**
+     * Used to format the notification.
+     *
+     * @param notification  notification object passed to the method for formatting
+     */
     protected static void format(Notification notification) {
         /*notification.setFeedID(notification.getFeed().getId());*/
         notification.setUserResponse(UserService.format(notification.getUser()));
     }
 
+    /**
+     * Retrieves a list of the 10 most recent notifications for a userId
+     *
+     * @param userID    userId of the logged in user who's notifications are being retrieved
+     * @return          returns a list of notifications
+     */
     public List<Notification> getTop10NotificationByUserID(Integer userID) {
         User user = userDao.findById(userID).orElse(null);
         if (user == null) return null;
@@ -39,6 +53,12 @@ public class NotificationService {
         return notifications;
     }
 
+    /**
+     * Retrieves a list of all notifications for a specific userId
+     *
+     * @param userID    userId of the logged in user who's notifications are being retrieved
+     * @return          returns a list of notifications
+     */
     public List<Notification> getNotificationByUserID(Integer userID) {
         User user = userDao.findById(userID).orElse(null);
         if (user == null) return null;

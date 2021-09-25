@@ -16,6 +16,7 @@ import java.util.List;
 
 /**
  * @author Zimi Li
+ * NotificationController used to manage the endpoints associated with Notification methods.
  */
 @RestController("NotificationController")
 @CrossOrigin(value = {"http://localhost:4200", "http://18.119.105.113:8080", "http://18.119.105.113:80"}, allowCredentials = "true")
@@ -27,6 +28,11 @@ public class NotificationController {
         this.notificationService = notificationService;
     }
 
+    /**
+     * MIGHT NOT BE NECESSARY, POSSIBLE REMOVAL
+     * @param req
+     * @return
+     */
     @GetMapping("notification-preview")
     public Response getPreviewNotification(HttpServletRequest req) {
         User user = (User) req.getSession().getAttribute("loggedInUser");
@@ -39,6 +45,12 @@ public class NotificationController {
             return new Response(true, "retrieved notification", notifications);
     }
 
+    /**
+     * Creates the API endpoint to get all notifications for the logged in user.
+     *
+     * @param req   THIS WILL CHANGE WHEN JWT IMPLEMENTED
+     * @return      returns a response indicating success (true/false), the message, and data returned
+     */
     @GetMapping("notification")
     public Response getAllNotification(HttpServletRequest req) {
         User user = (User) req.getSession().getAttribute("loggedInUser");
