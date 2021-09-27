@@ -4,6 +4,7 @@ import com.revature.ocean.models.Response;
 import com.revature.ocean.models.User;
 import com.revature.ocean.services.EmailService;
 import com.revature.ocean.services.UserService;
+import com.revature.ocean.utility.JwtUtility;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -18,7 +19,7 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-/*
+
 @SpringBootTest
 @ExtendWith(MockitoExtension.class)
 class UserControllerTest {
@@ -30,10 +31,21 @@ class UserControllerTest {
     EmailService emailService;
     @Mock
     HttpSession session;
+    @Mock
+    JwtUtility jwtUtility;
+
+    /*    private JwtUtility jwtUtility;
+
+    @Autowired
+    public UserController(UserService userService, EmailService emailService, JwtUtility jwtUtility) {
+        this.userService = userService;
+        this.emailService = emailService;
+        this.jwtUtility = jwtUtility;
+    }*/
 
     @BeforeEach
     void setUp() {
-        this.userController = new UserController(userService, emailService);
+        this.userController = new UserController(userService, emailService, jwtUtility);
     }
 
     @Test
@@ -46,7 +58,7 @@ class UserControllerTest {
         Mockito.when(userService.login(user)).thenReturn(null);
         //act
 
-        Response actualResult = this.userController.login(session, user);
+        Response actualResult = this.userController.login(user);
         //assert
         assertEquals(expectedResult.toString(), actualResult.toString());
     }
@@ -61,7 +73,7 @@ class UserControllerTest {
         Mockito.when(userService.login(tempUser)).thenReturn(tempUser);
         //act
 
-        Response actualResult = this.userController.login(session, tempUser);
+        Response actualResult = this.userController.login(tempUser);
         //assert
         assertEquals(expectedResult.toString(), actualResult.toString());
     }
@@ -162,6 +174,8 @@ class UserControllerTest {
 
     }
 
+    //public Response updateUser(@RequestBody User user, @RequestHeader Map<String, String> headers)
+
     @Test
     void updateUserReturnNull() {
         //assign
@@ -171,7 +185,7 @@ class UserControllerTest {
         //Mock
         Mockito.when(userService.updateUser(tempUser)).thenReturn(null);
         //act
-        Response actualResult = this.userController.updateUser(tempUser);
+        Response actualResult = this.userController.updateUser(tempUser, );
         //assert
         assertEquals(expectedResult.toString(), actualResult.toString());
     }
@@ -218,5 +232,3 @@ class UserControllerTest {
         assertEquals(expectedResult.toString(), actualResult.toString());
     }
 }
-
- */
