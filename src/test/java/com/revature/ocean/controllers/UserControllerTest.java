@@ -189,7 +189,7 @@ class UserControllerTest {
 
         //Mock
         Mockito.when(userService.updateUser(tempUser)).thenReturn(null);
-        Mockito.when(headers.get("authorization")).thenReturn(true);
+        //Mockito.when(jwtUtility.verify(headers.get("authorization")).thenReturn(true));
         //act
         Response actualResult = this.userController.updateUser(tempUser, headers);
         //assert
@@ -205,7 +205,7 @@ class UserControllerTest {
 
         //Mock
         Mockito.when(userService.updateUser(user)).thenReturn(user);
-        Mockito.when(headers.get("authorization")).thenReturn(true);
+        //Mockito.when(jwtUtility.verify(headers.get("authorization")).thenReturn(true));
         //act
         Response actualResult = this.userController.updateUser(user, headers);
         //assert
