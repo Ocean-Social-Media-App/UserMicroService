@@ -19,7 +19,6 @@ import java.util.List;
  * NotificationController used to manage the endpoints associated with Notification methods.
  */
 @RestController("NotificationController")
-@CrossOrigin(value = {"http://localhost:4200", "http://18.119.105.113:8080", "http://18.119.105.113:80"}, allowCredentials = "true")
 public class NotificationController {
     private NotificationService notificationService;
 
