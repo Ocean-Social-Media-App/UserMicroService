@@ -13,6 +13,8 @@ import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.util.Map;
+
 import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
 import java.util.List;
@@ -167,17 +169,29 @@ class UserControllerTest {
 
     //public Response updateUser(@RequestBody User user, @RequestHeader Map<String, String> headers)
 
+
+
     /*
+        public Response updateUser(@RequestBody User user, @RequestHeader Map<String, String> headers) {
+        Response response;
+
+        DecodedJWT decoded = jwtUtility.verify(headers.get("authorization"));
+    */
+
+/*
     @Test
     void updateUserReturnNull() {
         //assign
         User tempUser = new User("shane","pass1234");
         Response expectedResult = new Response(false,"Profile has not been updated.", null);
 
+        Map<String, String> headers;
+
         //Mock
         Mockito.when(userService.updateUser(tempUser)).thenReturn(null);
+        Mockito.when(headers.get("authorization")).thenReturn(true);
         //act
-        Response actualResult = this.userController.updateUser(tempUser, );
+        Response actualResult = this.userController.updateUser(tempUser, headers);
         //assert
         assertEquals(expectedResult.toString(), actualResult.toString());
     }
@@ -187,10 +201,13 @@ class UserControllerTest {
         User user = new User("shane","pass1234");
         Response expectedResult = new Response(true,"Profile has been updated.",user);
 
+        Map<String, String> headers;
+
         //Mock
         Mockito.when(userService.updateUser(user)).thenReturn(user);
+        Mockito.when(headers.get("authorization")).thenReturn(true);
         //act
-        Response actualResult = this.userController.updateUser(user);
+        Response actualResult = this.userController.updateUser(user, headers);
         //assert
         assertEquals(expectedResult.toString(), actualResult.toString());
     }*/
