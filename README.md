@@ -95,6 +95,9 @@ Tests:
 |  Register       |   `POST /api/user/user`             |
 |  Forgot 	      |   `GET /api/user/forgot/{username}` |
 |  Update Profile |   `PUT /api/user/updateUser`        |
+|  Get Following |    `GET /api/follow/{userId}`        |
+|  Follow Someone |   `POST /api/follow/{userId}`        |
+|  Unfollow Someone | `DELETE /api/follow/{userId}`        |
 
 ## Models (Non-finished list)
 ### User Model
