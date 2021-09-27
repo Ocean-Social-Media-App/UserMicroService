@@ -1,5 +1,6 @@
 package com.revature.ocean.services;
 
+import com.revature.ocean.models.Notification;
 import com.revature.ocean.models.User;
 import com.revature.ocean.models.Response;
 import com.revature.ocean.models.UserResponse;
@@ -20,8 +21,13 @@ import java.util.Set;
 public class UserService {
     private UserDao userDao;
 
+    private NotificationService notificationService;
+
     @Autowired
-    public UserService(UserDao userDao){this.userDao = userDao;}
+    public UserService(UserDao userDao, NotificationService notificationService) {
+        this.userDao = userDao;
+        this.notificationService = notificationService;
+    }
 
     BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
@@ -199,6 +205,15 @@ public class UserService {
         followers.add(userId);
         user.setUser_following(following);
         this.userDao.save(user);
+
+        Notification notification = new Notification();
+        notification.setUserFrom(user);
+        notification.setUserBelongTo(follow);
+        notification.setType("follow");
+        notification.setTimestamp(System.currentTimeMillis());
+
+        this.notificationService.createNotification(notification);
+
         return following;
     }
 
@@ -219,6 +234,15 @@ public class UserService {
         followers.remove(userId);
         user.setUser_following(following);
         this.userDao.save(user);
+
+        Notification notification = new Notification();
+        notification.setUserFrom(user);
+        notification.setUserBelongTo(follow);
+        notification.setType("unfollow");
+        notification.setTimestamp(System.currentTimeMillis());
+
+        this.notificationService.createNotification(notification);
+
         return following;
     }
 
@@ -230,6 +254,8 @@ public class UserService {
      */
     public Set<Integer> getFollowing(Integer userId){
         User user = this.userDao.findById(userId).orElse(null);
+        if(user == null)
+            return new HashSet<>();
         return user.getUser_following();
     }
 

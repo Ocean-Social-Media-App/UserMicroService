@@ -32,7 +32,13 @@ public class Notification {
 
     @ManyToOne(cascade = CascadeType.ALL)
     //@JsonIgnore
-    private User user;
+    private User userBelongTo;
+
+    @ManyToOne(cascade = CascadeType.ALL)
+    private User userFrom;
+
+    @Column(name = "notification_feedid")
+    private Integer feedId;
 
    /* @ManyToOne(cascade = CascadeType.ALL)
     @JsonIgnore

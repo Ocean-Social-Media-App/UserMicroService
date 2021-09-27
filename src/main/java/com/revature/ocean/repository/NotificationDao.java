@@ -22,7 +22,7 @@ public interface NotificationDao extends JpaRepository<Notification, Integer> {
      * @param user  user object whose notifications are being returned
      * @return      returns a list of notifications
      */
-    List<Notification> findTop10ByUserOrderByTimestampDesc(User user);
+    List<Notification> findTop10ByUserBelongToOrderByTimestampDesc(User user);
 
     /**
      * Queries the database for all notifications associated with a specific user object.
@@ -30,5 +30,5 @@ public interface NotificationDao extends JpaRepository<Notification, Integer> {
      * @param user  user object whose notifications are being returned
      * @return      returns a list of notifications
      */
-    List<Notification> findByUserOrderByTimestampDesc(User user);
+    List<Notification> findByUserBelongToOrderByTimestampDesc(User user);
 }
