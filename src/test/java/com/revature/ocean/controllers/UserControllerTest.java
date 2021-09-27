@@ -178,7 +178,12 @@ class UserControllerTest {
         DecodedJWT decoded = jwtUtility.verify(headers.get("authorization"));
     */
 
-/*
+
+
+    //Actually... we'll get the JWT token when we log in
+    //So we can log in, then use THAT to map the string headers
+    //They should be the jwttoken and the userId
+
     @Test
     void updateUserReturnNull() {
         //assign
@@ -189,7 +194,6 @@ class UserControllerTest {
 
         //Mock
         Mockito.when(userService.updateUser(tempUser)).thenReturn(null);
-        //Mockito.when(jwtUtility.verify(headers.get("authorization")).thenReturn(true));
         //act
         Response actualResult = this.userController.updateUser(tempUser, headers);
         //assert
@@ -205,12 +209,11 @@ class UserControllerTest {
 
         //Mock
         Mockito.when(userService.updateUser(user)).thenReturn(user);
-        //Mockito.when(jwtUtility.verify(headers.get("authorization")).thenReturn(true));
         //act
         Response actualResult = this.userController.updateUser(user, headers);
         //assert
         assertEquals(expectedResult.toString(), actualResult.toString());
-    }*/
+    }
 
     @Test
     void getUserByIdReturnNull() {
