@@ -50,9 +50,12 @@ public class UserController {
     //Checks to see if user is in database other wise it'll reject their log in
     @PostMapping("login")
     public Response login(@RequestBody User user) {
+        System.out.println("UserController.login");
         Response response;
 
         User tempUser = this.userService.login(user);
+        System.out.println("UserController.login; tempUser created");
+        System.out.println("tempUser = " + tempUser);
         if (tempUser != null) {
             //session.setAttribute("loggedInUser", tempUser);
             response = new Response(true, jwtUtility.genToken(tempUser.getUserId()),tempUser);
@@ -120,7 +123,7 @@ public class UserController {
 
         DecodedJWT decoded = jwtUtility.verify(headers.get("authorization"));
         if(decoded == null) {
-            return new Response(false, "Invalid Token, try again.", null);
+            return new Response(false, "Invalid Token (1), try again.", null);
         }
         else{
             if(decoded.getClaims().get("userId").asInt() == user.getUserId()) {
@@ -133,7 +136,7 @@ public class UserController {
                 }
             }
             else{
-                return new Response(false, "Invalid Token, try again.", null);
+                return new Response(false, "Invalid Token (2), try again.", null);
             }
         }
 
