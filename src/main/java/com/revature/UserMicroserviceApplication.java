@@ -9,7 +9,7 @@ import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
  * This application utilizes Spring Boot and connects to the gateway with Spring's Eureka (@EnableEurekaClient)
  */
 @SpringBootApplication
-//@EnableEurekaClient
+@EnableEurekaClient
 public class UserMicroserviceApplication {
 
 	public static void main(String[] args) {
