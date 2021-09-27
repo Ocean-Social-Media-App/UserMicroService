@@ -295,30 +295,47 @@ public class UserController {
     }
 
     @DeleteMapping("follow/{userId}")
-    public Response unfollow(HttpServletRequest req, @PathVariable Integer userId) {
-        User user = (User) req.getSession().getAttribute("loggedInUser");
-        int id = user.getUserId();
+    public Response unfollow(@PathVariable Integer userId, @RequestBody Integer followUserId, @RequestHeader Map<String, String> headers) {
+        //User user = (User) req.getSession().getAttribute("loggedInUser");
+
         Response response;
-        Set<Integer> followings = this.userService.getFollowing(user.getUserId());
-        boolean isFollowing = followings.contains(userId);
-        System.out.println("Is following: " + isFollowing);
-        if (user == null) {
-            response = new Response(false, "User not found", null);
-            return response;
-        } else if (user.getUserId() == userId) {
-            response = new Response(false, "You cannot unfollow youself", null);
-            return response;
-        } else if (!isFollowing) {
-            response = new Response(false, "you are not following this user.", null);
-            return response;
-        } else {
-            Set<Integer> followers = this.userService.unfollow(id, userId);
-            if (followers != null) {
-                response = new Response(true, "unfollow success.", followers);
-            } else {
-                response = new Response(false, "you are not following this user.", null);
+        DecodedJWT decoded = jwtUtility.verify(headers.get("authorization"));
+
+        if(decoded == null) {
+            return new Response(false, "Invalid Token, try again.", null);
+        }
+        else {
+            if(decoded.getClaims().get("userId").asInt() == userId) {
+                User followUser = userService.getUserById(followUserId);
+
+                int id = followUserId;
+
+                Set<Integer> followings = this.userService.getFollowing(userId);
+                boolean isFollowing = followings.contains(followUserId);
+                System.out.println("Is following: " + isFollowing);
+
+                if (followUser == null) {
+                    response = new Response(false, "User not found", null);
+                    return response;
+                } else if (followUser.getUserId() == userId) {
+                    response = new Response(false, "You cannot unfollow youself", null);
+                    return response;
+                } else if (!isFollowing) {
+                    response = new Response(false, "you are not following this user.", null);
+                    return response;
+                } else {
+                    Set<Integer> followers = this.userService.unfollow(userId, id);
+                    if (followers != null) {
+                        response = new Response(true, "unfollow success.", followers);
+                    } else {
+                        response = new Response(false, "you are not following this user.", null);
+                    }
+                    return response;
+                }
             }
-            return response;
+            else{
+                return new Response(false, "Invalid Token, try again.", null);
+            }
         }
     }
 
@@ -344,23 +361,36 @@ public class UserController {
     }
 
     @GetMapping("follow/{userId}")
-    public Response getfollowing(@PathVariable Integer userId) {
+    public Response getfollowing(@PathVariable Integer userId, @RequestHeader Map<String, String> headers) {
         //User user = (User) req.getSession().getAttribute("loggedInUser");
+
         Response response;
-        //if (user != null) {
-            Set<Integer> followers = this.userService.getFollowing(userId);
-            if (followers != null) {
-                response = new Response(true, "Following obtained.", followers);
-            } else {
-                response = new Response(false, "Following not found.", null);
+        DecodedJWT decoded = jwtUtility.verify(headers.get("authorization"));
 
+        if(decoded == null) {
+            return new Response(false, "Invalid Token, try again.", null);
+        }
+        else {
+            if (decoded.getClaims().get("userId").asInt() == userId) {
+                User user = userService.getUserById(userId);
+                if (user != null) {
+                    Set<Integer> followers = this.userService.getFollowing(userId);
+                    if (followers != null) {
+                        response = new Response(true, "Following obtained.", followers);
+                    } else {
+                        response = new Response(false, "Following not found.", null);
+
+                    }
+                    return response;
+                } else {
+                    response = new Response(false, "User not found", null);
+                    return response;
+                }
             }
-            return response;
-        /*}else{
-            response = new Response(false, "User not found", null);
-            return response;
-        }*/
-
+            else{
+                return new Response(false, "Invalid Token, try again.", null);
+            }
+        }
     }
 }
 
