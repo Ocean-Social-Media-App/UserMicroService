@@ -27,6 +27,10 @@ public class NotificationService {
         this.userDao = userDao;
     }
 
+    public Notification createNotification(Notification notification){
+        return this.notificationDao.save(notification);
+    }
+
     /**
      * Used to format the notification.
      *
@@ -34,7 +38,7 @@ public class NotificationService {
      */
     protected static void format(Notification notification) {
         /*notification.setFeedID(notification.getFeed().getId());*/
-        notification.setUserResponse(UserService.format(notification.getUser()));
+        notification.setUserResponse(UserService.format(notification.getUserBelongTo()));
     }
 
     /**
@@ -46,7 +50,7 @@ public class NotificationService {
     public List<Notification> getTop10NotificationByUserID(Integer userID) {
         User user = userDao.findById(userID).orElse(null);
         if (user == null) return null;
-        List<Notification> notifications = notificationDao.findTop10ByUserOrderByTimestampDesc(user);
+        List<Notification> notifications = notificationDao.findTop10ByUserBelongToOrderByTimestampDesc(user);
         notifications.forEach(NotificationService::format);
         user.setLastNotification(System.currentTimeMillis());
         userDao.save(user);
@@ -62,7 +66,7 @@ public class NotificationService {
     public List<Notification> getNotificationByUserID(Integer userID) {
         User user = userDao.findById(userID).orElse(null);
         if (user == null) return null;
-        List<Notification> notifications = notificationDao.findByUserOrderByTimestampDesc(user);
+        List<Notification> notifications = notificationDao.findByUserBelongToOrderByTimestampDesc(user);
         notifications.forEach(NotificationService::format);
         user.setLastNotification(System.currentTimeMillis());
         userDao.save(user);

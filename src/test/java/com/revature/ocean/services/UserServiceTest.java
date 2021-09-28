@@ -1,6 +1,7 @@
 package com.revature.ocean.services;
 
 import com.revature.ocean.models.User;
+import com.revature.ocean.repository.NotificationDao;
 import com.revature.ocean.repository.UserDao;
 import org.joda.time.DateTime;
 import org.junit.jupiter.api.BeforeEach;
@@ -25,9 +26,12 @@ class UserServiceTest {
     @Mock
     UserDao userDao;
 
+    @Mock
+    NotificationService notificationService;
+
     @BeforeEach
     void setUp() {
-        this.userService = new UserService(userDao);
+        this.userService = new UserService(userDao,notificationService);
 
     }
 
