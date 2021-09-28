@@ -104,16 +104,26 @@ public class UserService {
      */
     public User updateUser(User user) {
         //Gets the user from Database
-        User dataBaseUser =this.userDao.findUserByUsername(user.getUsername());
+        User dataBaseUser =this.userDao.findById(user.getUserId()).orElse(null);
         //Checks to see if a result was returned
         if(dataBaseUser != null){
             //To make sure the ID & Password doesn't get changed by anyone
-            user.setUserId(dataBaseUser.getUserId());
+            dataBaseUser.setFirstName(user.getFirstName());
+            dataBaseUser.setLastName(user.getLastName());
+            dataBaseUser.setEmail(user.getEmail());
+            dataBaseUser.setBday(user.getBday());
+            dataBaseUser.setAboutMe(user.getAboutMe());
+            /*user.setUserId(dataBaseUser.getUserId());
             user.setPassword(dataBaseUser.getPassword());
+            dataBaseUser.setPassword(user.getPassword());
+            user.setProPicUrl(dataBaseUser.getProPicUrl());
+            user.setBookmarks(dataBaseUser.getBookmarks());
+            user.setUser_following(dataBaseUser.getUser_following());
+            user.setLastNotification(dataBaseUser.getLastNotification());*/
             //Executes the update
-            this.userDao.save(user);
+            /*return*/ this.userDao.save(dataBaseUser);
             //Returns the updated user
-            return user;
+            return dataBaseUser;
         }
         return null;
     }

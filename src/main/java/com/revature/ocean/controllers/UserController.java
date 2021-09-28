@@ -125,12 +125,12 @@ public class UserController {
         else{
             if(decoded.getClaims().get("userId").asInt() == user.getUserId()) {
                 User updateUser = this.userService.updateUser(user);
-                if (updateUser == user) {
+                /*if (updateUser == user) {*/
                     user.setPassword(null);
                     response = new Response(true, "Token found. Profile has been updated.", user);
-                } else {
+ /*               } else {
                     response = new Response(false, "Cannot update.", null);
-                }
+                }*/
             }
             else{
                 return new Response(false, "Invalid Token, try again.", null);
