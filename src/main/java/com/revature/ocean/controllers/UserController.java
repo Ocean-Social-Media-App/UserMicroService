@@ -49,12 +49,9 @@ public class UserController {
     //Checks to see if user is in database other wise it'll reject their log in
     @PostMapping("login")
     public Response login(@RequestBody User user) {
-        System.out.println("UserController.login");
         Response response;
 
         User tempUser = this.userService.login(user);
-        System.out.println("UserController.login; tempUser created");
-        System.out.println("tempUser = " + tempUser);
         if (tempUser != null) {
             //session.setAttribute("loggedInUser", tempUser);
             response = new Response(true, jwtUtility.genToken(tempUser.getUserId()),tempUser);
@@ -79,7 +76,7 @@ public class UserController {
         if (tempUser != null) {
             this.emailService.welcomeEmail(tempUser.getEmail(), tempUser.getFirstName());
             user.setPassword(null);
-            response = new Response(true, "User successfully created.", user);
+            response = new Response(true, jwtUtility.genToken(tempUser.getUserId()), tempUser);
         } else {
             response = new Response(false, "This User already exists.", null);
         }
