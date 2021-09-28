@@ -77,7 +77,7 @@ public class UserController {
         if (tempUser != null) {
             this.emailService.welcomeEmail(tempUser.getEmail(), tempUser.getFirstName());
             user.setPassword(null);
-            response = new Response(true, "User successfully created.", user);
+            response = new Response(true, jwtUtility.genToken(tempUser.getUserId()), tempUser);
         } else {
             response = new Response(false, "This User already exists.", null);
         }
