@@ -30,7 +30,9 @@ public class JwtUtility {
      * @return          returns a string representing the JWT
      */
     public String genToken(Integer userId) {
+        System.out.println("jwtUtility.genToken");
         try {
+            System.out.println("jwtUtility.genToken try block");
 //            Map<String, String> payloads = new HashMap<>();
 //            payloads.put("userId", "12312");
 //            payloads.put("uesrName", "username");
@@ -40,6 +42,7 @@ public class JwtUtility {
                     .withExpiresAt(new Date(System.currentTimeMillis() + timeLength))
                     .sign(algorithm);
         } catch (JWTCreationException exception){
+            System.out.println("jwtUtility.genToken catch block");
             exception.printStackTrace();
         }
         return null;

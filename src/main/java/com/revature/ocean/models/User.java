@@ -58,10 +58,10 @@ public class User {
     @ElementCollection
     private Set<Integer> bookmarks;
 
-    @ElementCollection
+    @ElementCollection(fetch = FetchType.EAGER)
     private Set<Integer> user_following;
 
-    @ElementCollection
+    @ElementCollection(fetch = FetchType.EAGER)
     private Set<Integer> followers;
 
     //constructor for login

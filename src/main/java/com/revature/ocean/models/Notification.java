@@ -30,9 +30,15 @@ public class Notification {
     @Column(name = "notification_timestamp", nullable = false)
     private Long timestamp;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne(cascade = CascadeType.MERGE)
     //@JsonIgnore
-    private User user;
+    private User userBelongTo;
+
+    @ManyToOne(cascade = CascadeType.MERGE)
+    private User userFrom;
+
+    @Column(name = "notification_feedid")
+    private Integer feedId;
 
    /* @ManyToOne(cascade = CascadeType.ALL)
     @JsonIgnore

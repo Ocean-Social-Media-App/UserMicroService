@@ -76,7 +76,7 @@ public class UserController {
         if (tempUser != null) {
             this.emailService.welcomeEmail(tempUser.getEmail(), tempUser.getFirstName());
             user.setPassword(null);
-            response = new Response(true, "User successfully created.", user);
+            response = new Response(true, jwtUtility.genToken(tempUser.getUserId()), tempUser);
         } else {
             response = new Response(false, "This User already exists.", null);
         }
@@ -119,20 +119,20 @@ public class UserController {
 
         DecodedJWT decoded = jwtUtility.verify(headers.get("authorization"));
         if(decoded == null) {
-            return new Response(false, "Invalid Token, try again.", null);
+            return new Response(false, "Invalid Token (1), try again.", null);
         }
         else{
             if(decoded.getClaims().get("userId").asInt() == user.getUserId()) {
                 User updateUser = this.userService.updateUser(user);
-                if (updateUser == user) {
+                /*if (updateUser == user) {*/
                     user.setPassword(null);
                     response = new Response(true, "Token found. Profile has been updated.", user);
-                } else {
+ /*               } else {
                     response = new Response(false, "Cannot update.", null);
-                }
+                }*/
             }
             else{
-                return new Response(false, "Invalid Token, try again.", null);
+                return new Response(false, "Invalid Token (2), try again.", null);
             }
         }
 

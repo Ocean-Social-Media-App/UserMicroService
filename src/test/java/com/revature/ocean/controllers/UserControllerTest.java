@@ -4,6 +4,7 @@ import com.revature.ocean.models.Response;
 import com.revature.ocean.models.User;
 import com.revature.ocean.services.EmailService;
 import com.revature.ocean.services.UserService;
+import com.revature.ocean.utility.JwtUtility;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -12,13 +13,16 @@ import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-/*
+
 @SpringBootTest
 @ExtendWith(MockitoExtension.class)
 class UserControllerTest {
@@ -30,10 +34,14 @@ class UserControllerTest {
     EmailService emailService;
     @Mock
     HttpSession session;
+    @Mock
+    JwtUtility jwtUtility;
 
     @BeforeEach
     void setUp() {
-        this.userController = new UserController(userService, emailService);
+        this.userController = new UserController(userService, emailService, jwtUtility);
+        User user = new User("Shane", "Password");
+        userController.createUser(user);
     }
 
     @Test
@@ -46,7 +54,7 @@ class UserControllerTest {
         Mockito.when(userService.login(user)).thenReturn(null);
         //act
 
-        Response actualResult = this.userController.login(session, user);
+        Response actualResult = this.userController.login(user);
         //assert
         assertEquals(expectedResult.toString(), actualResult.toString());
     }
@@ -55,13 +63,16 @@ class UserControllerTest {
     void loginReturnNotNull() {
         //assign
         User tempUser = new User("Shane", "Password");
-        Response expectedResult = new Response(true, "Logged in and session created.", tempUser);
+        tempUser.setUserId(999999);
+
+        Response expectedResult = new Response(true, "testing", tempUser);
 
         //Mock
         Mockito.when(userService.login(tempUser)).thenReturn(tempUser);
+        Mockito.when(jwtUtility.genToken(999999)).thenReturn("testing");
         //act
 
-        Response actualResult = this.userController.login(session, tempUser);
+        Response actualResult = this.userController.login(tempUser);
         //assert
         assertEquals(expectedResult.toString(), actualResult.toString());
     }
@@ -162,16 +173,38 @@ class UserControllerTest {
 
     }
 
+    //public Response updateUser(@RequestBody User user, @RequestHeader Map<String, String> headers)
+
+
+
+    /*
+        public Response updateUser(@RequestBody User user, @RequestHeader Map<String, String> headers) {
+        Response response;
+
+        DecodedJWT decoded = jwtUtility.verify(headers.get("authorization"));
+    */
+
+
+
+    //Actually... we'll get the JWT token when we log in
+    //So we can log in, then use THAT to map the string headers
+    //They should be the jwttoken and the userId
+
     @Test
     void updateUserReturnNull() {
         //assign
         User tempUser = new User("shane","pass1234");
-        Response expectedResult = new Response(false,"Profile has not been updated.", null);
+        tempUser.setUserId(999999);
+        Response expectedResult = new Response(false,"Invalid Token (1), try again.", null);
+
+        Map<String, String> headers = new HashMap<>();
+        headers.put("userId", "999999");
+        headers.put("authorization", "testing");
 
         //Mock
         Mockito.when(userService.updateUser(tempUser)).thenReturn(null);
         //act
-        Response actualResult = this.userController.updateUser(tempUser);
+        Response actualResult = this.userController.updateUser(tempUser, headers);
         //assert
         assertEquals(expectedResult.toString(), actualResult.toString());
     }
@@ -179,12 +212,19 @@ class UserControllerTest {
     void updateUserReturnNotNull() {
         //assign
         User user = new User("shane","pass1234");
-        Response expectedResult = new Response(true,"Profile has been updated.",user);
+        user.setUserId(999999);
+        Response expectedResult = new Response(true,"Token found. Profile has been updated.",user);
+
+        Map<String, String> headers = new HashMap<>();
+        headers.put("userId", "999999");
+        headers.put("authorization", "testing");
 
         //Mock
         Mockito.when(userService.updateUser(user)).thenReturn(user);
+        Mockito.when(jwtUtility.genToken(999999)).thenReturn("testing");
+        //Mockito.when(jwtUtility.verify(headers.get("authorization"))).thenReturn(headers);
         //act
-        Response actualResult = this.userController.updateUser(user);
+        Response actualResult = this.userController.updateUser(user, headers);
         //assert
         assertEquals(expectedResult.toString(), actualResult.toString());
     }
@@ -218,5 +258,3 @@ class UserControllerTest {
         assertEquals(expectedResult.toString(), actualResult.toString());
     }
 }
-
- */
