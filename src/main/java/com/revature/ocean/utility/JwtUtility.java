@@ -54,6 +54,9 @@ public class JwtUtility {
      * @return          returns a DecodedJWT object
      */
     public DecodedJWT verify(String token) {
+        if(token == null){
+            return null;
+        }
         try {
             return verifier.verify(token);
         } catch (JWTVerificationException exception){
