@@ -21,4 +21,6 @@ public interface UserDao extends JpaRepository<User, Integer> {
      * @return          returns the user object that matches the username
      */
     User findUserByUsername(String username);
+
+
 }
