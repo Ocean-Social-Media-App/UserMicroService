@@ -19,7 +19,6 @@ import java.util.Map;
  * UserController controls the API endpoints associated with User methods.
  */
 @RestController("userController")
-@CrossOrigin(value = "http://localhost:4200/", allowCredentials = "true")
 public class UserController {
 
     private UserService userService;
@@ -80,7 +79,7 @@ public class UserController {
         if (tempUser != null) {
             this.emailService.welcomeEmail(tempUser.getEmail(), tempUser.getFirstName());
             user.setPassword(null);
-            response = new Response(true, "User successfully created.", user);
+            response = new Response(true, jwtUtility.genToken(tempUser.getUserId()), tempUser);
         } else {
             response = new Response(false, "This User already exists.", null);
         }
@@ -128,12 +127,12 @@ public class UserController {
         else{
             if(decoded.getClaims().get("userId").asInt() == user.getUserId()) {
                 User updateUser = this.userService.updateUser(user);
-                if (updateUser == user) {
+                /*if (updateUser == user) {*/
                     user.setPassword(null);
                     response = new Response(true, "Token found. Profile has been updated.", user);
-                } else {
+ /*               } else {
                     response = new Response(false, "Cannot update.", null);
-                }
+                }*/
             }
             else{
                 return new Response(false, "Invalid Token (2), try again.", null);
