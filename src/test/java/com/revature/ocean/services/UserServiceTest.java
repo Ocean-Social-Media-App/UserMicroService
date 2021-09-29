@@ -36,37 +36,37 @@ class UserServiceTest {
     }
 
 
-//    @Test
-//    void login() {
-//        //Mock method being called in the same class UserService
-//        UserService userServiceMethod = Mockito.spy(this.userService);
-//        BCryptPasswordEncoder bEncoder = Mockito.mock(BCryptPasswordEncoder.class);
-//        BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
-//
-//        //Assign
-//        // Mock DB entry
-//        User expectedResult = new User("user", "password", "test@test.com", "User", "Test", new Date(), "About Me");
-//        User inputUser = expectedResult;
-//        inputUser.setUsername("user");
-//        inputUser.setPassword("password");
-//
-//        System.out.println(inputUser);
-//        String encodedPass = bCryptPasswordEncoder.encode(inputUser.getPassword());
-//        System.out.println(encodedPass);
-//
-//        Mockito.when(userServiceMethod.checkForUser(inputUser.getUsername())).thenReturn(expectedResult);
-//        //Mockito.when(bCryptPasswordEncoder.encode(inputUser.getPassword())).thenReturn(encodedPass);
-//        //Mockito.when(bEncoder.matches(inputUser.getPassword(), encodedPass)).thenReturn(true);
-//
-//        //Act
-//        User actualResult = this.userService.login(inputUser);
-//
-//        //Assert
-//        assertEquals(expectedResult, actualResult);
-//
-//        //Verify
-//        //Mockito.verify(bEncoder, Mockito.times(1)).matches(inputUser.getPassword(), expectedResult.getPassword());
-//    }
+    @Test
+    void login() {
+        //Mock method being called in the same class UserService
+        UserService userServiceMethod = Mockito.spy(this.userService);
+        BCryptPasswordEncoder bEncoder = Mockito.mock(BCryptPasswordEncoder.class);
+        BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
+
+        //Assign
+        // Mock DB entry
+        User expectedResult = new User("user", "password", "test@test.com", "User", "Test", new Date(), "About Me");
+        User inputUser = expectedResult;
+        inputUser.setUsername("user");
+        inputUser.setPassword("password");
+
+        System.out.println(inputUser);
+        String encodedPass = bEncoder.encode(inputUser.getPassword());
+        System.out.println(encodedPass);
+
+        Mockito.when(userServiceMethod.checkForUser(inputUser.getUsername())).thenReturn(expectedResult);
+        Mockito.when(bEncoder.encode(inputUser.getPassword())).thenReturn(encodedPass);
+        //Mockito.when(bEncoder.matches(inputUser.getPassword(), encodedPass)).thenReturn(true);
+
+        //Act
+        User actualResult = this.userService.login(inputUser);
+
+        //Assert
+        assertEquals(expectedResult, actualResult);
+
+        //Verify
+        //Mockito.verify(bEncoder, Mockito.times(1)).matches(inputUser.getPassword(), expectedResult.getPassword());
+    }
 
     @Test
     void checkForUser() {
