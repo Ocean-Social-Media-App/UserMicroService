@@ -152,7 +152,6 @@ public class UserController {
 
     @GetMapping("bookmark/{userId}/{pageNumber}")
     public Response getBookmarks(@PathVariable Integer userId, @PathVariable Integer pageNumber,@RequestHeader Map<String, String> headers) {
-
         Response response;
         DecodedJWT decoded = jwtUtility.verify(headers.get("authorization"));
         if(decoded == null) {
@@ -213,7 +212,6 @@ public class UserController {
     }
 
     @DeleteMapping("bookmark/{userId}/{postId}")
-
     public Response removeBookmark(@PathVariable Integer userId, @PathVariable Integer postId, @RequestHeader Map<String, String> headers){
         Response response;
         DecodedJWT decoded = jwtUtility.verify(headers.get("authorization"));
@@ -244,11 +242,8 @@ public class UserController {
         }
     }
 
-
     @PostMapping("follow/{userId}")
     public Response follow(@PathVariable Integer userId, @RequestBody Integer followUserId, @RequestHeader Map<String, String> headers) {
-        //User user = (User) req.getSession().getAttribute("loggedInUser");
-
         Response response;
         DecodedJWT decoded = jwtUtility.verify(headers.get("authorization"));
 
@@ -287,8 +282,6 @@ public class UserController {
 
     @DeleteMapping("follow/{userId}")
     public Response unfollow(@PathVariable Integer userId, @RequestBody Integer followUserId, @RequestHeader Map<String, String> headers) {
-        //User user = (User) req.getSession().getAttribute("loggedInUser");
-
         Response response;
         DecodedJWT decoded = jwtUtility.verify(headers.get("authorization"));
 
