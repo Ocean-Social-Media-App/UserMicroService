@@ -40,13 +40,6 @@ public class Notification {
     @Column(name = "notification_feedid")
     private Integer feedId;
 
-   /* @ManyToOne(cascade = CascadeType.ALL)
-    @JsonIgnore
-    private Feed feed;*/
-
-   /* @Transient
-    private Integer feedID;*/
-
     @Transient
     private Response response;
 

@@ -106,7 +106,7 @@ class UserControllerTest {
     void createUserReturnNotNull() {
         //assign
         User tempUser = new User("shane","pass1234");
-        Response expectedResult = new Response(true, "User successfully created.", tempUser);
+        Response expectedResult = new Response(true, null, tempUser);
 
         //Mock
         Mockito.when(userService.createUser(tempUser)).thenReturn(tempUser);
@@ -202,7 +202,7 @@ class UserControllerTest {
         headers.put("authorization", "testing");
 
         //Mock
-        Mockito.when(userService.updateUser(tempUser)).thenReturn(null);
+        //Mockito.when(userService.updateUser(tempUser)).thenReturn(null);
         //act
         Response actualResult = this.userController.updateUser(tempUser, headers);
         //assert

@@ -125,12 +125,9 @@ public class UserController {
         else{
             if(decoded.getClaims().get("userId").asInt() == user.getUserId()) {
                 User updateUser = this.userService.updateUser(user);
-                /*if (updateUser == user) {*/
+
                     user.setPassword(null);
                     response = new Response(true, "Token found. Profile has been updated.", user);
- /*               } else {
-                    response = new Response(false, "Cannot update.", null);
-                }*/
             }
             else{
                 return new Response(false, "Invalid Token (2), try again.", null);
@@ -154,10 +151,8 @@ public class UserController {
         return response;
     }
 
-    @GetMapping("bookmark/{userId}")
-    public Response getBookmarks(@PathVariable Integer userId, @RequestHeader Map<String, String> headers) {
-        //User user = (User) req.getSession().getAttribute("loggedInUser");
-
+    @GetMapping("bookmark/{userId}/{pageNumber}")
+    public Response getBookmarks(@PathVariable Integer userId, @PathVariable Integer pageNumber,@RequestHeader Map<String, String> headers) {
         Response response;
         DecodedJWT decoded = jwtUtility.verify(headers.get("authorization"));
         if(decoded == null) {
@@ -167,7 +162,7 @@ public class UserController {
             if(decoded.getClaims().get("userId").asInt() == userId) {
                 User user = userService.getUserById(userId);
                 if (user != null) {
-                    Set<Integer> bookmarks = this.userService.getBookmarks(user.getUserId());
+                    List<Integer> bookmarks = this.userService.getBookmarks(user.getUserId(), pageNumber);
 
                     if (bookmarks != null) {
                         response = new Response(true, "Bookmarks obtained.", bookmarks);
@@ -186,11 +181,8 @@ public class UserController {
         }
     }
 
-    //
     @PostMapping("bookmark/{userId}")
     public Response setBookmark(@PathVariable Integer userId, @RequestBody Integer postId, @RequestHeader Map<String, String> headers) {
-        //User user = (User) req.getSession().getAttribute("loggedInUser");
-
         Response response;
         DecodedJWT decoded = jwtUtility.verify(headers.get("authorization"));
 
@@ -201,7 +193,7 @@ public class UserController {
             if(decoded.getClaims().get("userId").asInt() == userId) {
                 User user = userService.getUserById(userId);
                 if (user != null) {
-                    Set<Integer> bookmarks = this.userService.setBookmark(user.getUserId(), postId);
+                    List<Integer> bookmarks = this.userService.setBookmark(user.getUserId(), postId);
 
                     if (bookmarks != null) {
                         response = new Response(true, "Bookmark set.", bookmarks);
@@ -221,9 +213,13 @@ public class UserController {
     }
 
     @DeleteMapping("bookmark/{userId}/{postId}")
+<<<<<<< HEAD
     public Response removeBookmark(@PathVariable Integer userId, @PathVariable Integer postId, @RequestHeader Map<String, String> headers) {
         //User user = (User) req.getSession().getAttribute("loggedInUser");
 
+=======
+    public Response removeBookmark(@PathVariable Integer userId, @PathVariable Integer postId, @RequestHeader Map<String, String> headers){
+>>>>>>> development
         Response response;
         DecodedJWT decoded = jwtUtility.verify(headers.get("authorization"));
 
@@ -234,7 +230,7 @@ public class UserController {
             if(decoded.getClaims().get("userId").asInt() == userId) {
                 User user = userService.getUserById(userId);
                 if (user != null) {
-                    Set<Integer> bookmarks = this.userService.removeBookmark(user.getUserId(), postId);
+                    List<Integer> bookmarks = this.userService.removeBookmark(user.getUserId(), postId);
 
                     if (bookmarks != null) {
                         response = new Response(true, "Bookmark removed.", bookmarks);
@@ -253,11 +249,8 @@ public class UserController {
         }
     }
 
-
     @PostMapping("follow/{userId}")
     public Response follow(@PathVariable Integer userId, @RequestBody Integer followUserId, @RequestHeader Map<String, String> headers) {
-        //User user = (User) req.getSession().getAttribute("loggedInUser");
-
         Response response;
         DecodedJWT decoded = jwtUtility.verify(headers.get("authorization"));
 
@@ -296,8 +289,6 @@ public class UserController {
 
     @DeleteMapping("follow/{userId}")
     public Response unfollow(@PathVariable Integer userId, @RequestBody Integer followUserId, @RequestHeader Map<String, String> headers) {
-        //User user = (User) req.getSession().getAttribute("loggedInUser");
-
         Response response;
         DecodedJWT decoded = jwtUtility.verify(headers.get("authorization"));
 
@@ -362,8 +353,6 @@ public class UserController {
 
     @GetMapping("follow/{userId}")
     public Response getfollowing(@PathVariable Integer userId, @RequestHeader Map<String, String> headers) {
-        //User user = (User) req.getSession().getAttribute("loggedInUser");
-
         Response response;
         DecodedJWT decoded = jwtUtility.verify(headers.get("authorization"));
 

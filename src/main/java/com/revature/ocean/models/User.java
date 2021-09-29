@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.util.Date;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -55,8 +56,8 @@ public class User {
     @Column(name = "user_last_notification")
     private Long lastNotification;
 
-    @ElementCollection
-    private Set<Integer> bookmarks;
+    @ElementCollection(fetch = FetchType.EAGER)
+    private List<Integer> bookmarks;
 
     @ElementCollection(fetch = FetchType.EAGER)
     private Set<Integer> user_following;
