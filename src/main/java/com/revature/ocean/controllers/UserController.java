@@ -124,12 +124,9 @@ public class UserController {
         else{
             if(decoded.getClaims().get("userId").asInt() == user.getUserId()) {
                 User updateUser = this.userService.updateUser(user);
-                /*if (updateUser == user) {*/
+
                     user.setPassword(null);
                     response = new Response(true, "Token found. Profile has been updated.", user);
- /*               } else {
-                    response = new Response(false, "Cannot update.", null);
-                }*/
             }
             else{
                 return new Response(false, "Invalid Token (2), try again.", null);
@@ -155,7 +152,6 @@ public class UserController {
 
     @GetMapping("bookmark/{userId}")
     public Response getBookmarks(@PathVariable Integer userId, @RequestHeader Map<String, String> headers) {
-        //User user = (User) req.getSession().getAttribute("loggedInUser");
 
         Response response;
         DecodedJWT decoded = jwtUtility.verify(headers.get("authorization"));
@@ -185,11 +181,8 @@ public class UserController {
         }
     }
 
-    //
     @PostMapping("bookmark/{userId}")
     public Response setBookmark(@PathVariable Integer userId, @RequestBody Integer postId, @RequestHeader Map<String, String> headers) {
-        //User user = (User) req.getSession().getAttribute("loggedInUser");
-
         Response response;
         DecodedJWT decoded = jwtUtility.verify(headers.get("authorization"));
 
@@ -222,8 +215,6 @@ public class UserController {
     @DeleteMapping("bookmark/{userId}/{postId}")
 
     public Response removeBookmark(@PathVariable Integer userId, @PathVariable Integer postId, @RequestHeader Map<String, String> headers){
-        //User user = (User) req.getSession().getAttribute("loggedInUser");
-
         Response response;
         DecodedJWT decoded = jwtUtility.verify(headers.get("authorization"));
 
@@ -362,8 +353,6 @@ public class UserController {
 
     @GetMapping("follow/{userId}")
     public Response getfollowing(@PathVariable Integer userId, @RequestHeader Map<String, String> headers) {
-        //User user = (User) req.getSession().getAttribute("loggedInUser");
-
         Response response;
         DecodedJWT decoded = jwtUtility.verify(headers.get("authorization"));
 

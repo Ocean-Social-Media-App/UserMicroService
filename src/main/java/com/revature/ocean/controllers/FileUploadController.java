@@ -8,15 +8,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-/*
- *    @author
- *      Front End:
- *        -Angel Walker
- *       -Trevor Drury
- *       Back End:
- *        -David Burton
- *        -Shane Danner
- */
 @RestController("fileUploadController")
 public class FileUploadController {
 

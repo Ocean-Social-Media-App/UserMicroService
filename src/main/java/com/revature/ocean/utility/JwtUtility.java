@@ -33,11 +33,6 @@ public class JwtUtility {
         System.out.println("jwtUtility.genToken");
         try {
             System.out.println("jwtUtility.genToken try block");
-//            Map<String, String> payloads = new HashMap<>();
-//            payloads.put("userId", "12312");
-//            payloads.put("uesrName", "username");
-//            String token = JWT.create().withPayload(payloads).sign(algorithm);
-//            return token;
             return JWT.create().withClaim("userId", userId)
                     .withExpiresAt(new Date(System.currentTimeMillis() + timeLength))
                     .sign(algorithm);

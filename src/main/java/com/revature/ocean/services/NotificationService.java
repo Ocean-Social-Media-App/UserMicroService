@@ -37,7 +37,6 @@ public class NotificationService {
      * @param notification  notification object passed to the method for formatting
      */
     protected static void format(Notification notification) {
-        /*notification.setFeedID(notification.getFeed().getId());*/
         notification.setUserResponse(UserService.format(notification.getUserBelongTo()));
     }
 

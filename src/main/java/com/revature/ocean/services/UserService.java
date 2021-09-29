@@ -113,15 +113,8 @@ public class UserService {
             dataBaseUser.setEmail(user.getEmail());
             dataBaseUser.setBday(user.getBday());
             dataBaseUser.setAboutMe(user.getAboutMe());
-            /*user.setUserId(dataBaseUser.getUserId());
-            user.setPassword(dataBaseUser.getPassword());
-            dataBaseUser.setPassword(user.getPassword());
-            user.setProPicUrl(dataBaseUser.getProPicUrl());
-            user.setBookmarks(dataBaseUser.getBookmarks());
-            user.setUser_following(dataBaseUser.getUser_following());
-            user.setLastNotification(dataBaseUser.getLastNotification());*/
-            //Executes the update
-            /*return*/ this.userDao.save(dataBaseUser);
+
+            this.userDao.save(dataBaseUser);
             //Returns the updated user
             return dataBaseUser;
         }

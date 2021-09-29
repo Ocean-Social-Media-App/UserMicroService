@@ -13,15 +13,6 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
-/*
- *    @author
- *      Front End:
- *        -Angel Walker
- *       -Trevor Drury
- *       Back End:
- *        -David Burton
- *        -Shane Danner
- */
 @Service("s3Service")
 public class S3Service {
 
@@ -55,7 +46,6 @@ public class S3Service {
 
     }
 
-    //We'll need the bucket name whenever we try to upload something.
     // changed to return Response instead of String - Trevor
     private Response uploadFile(File file, String pathName){
         System.out.println("S3service.uploadFile");
@@ -75,10 +65,6 @@ public class S3Service {
     //Which means that the path we're following would go /username/file type"+file.getName()
     //For example, a profile picture for user SomeGuy would go:
     //"/SomeGuy/profile.[file extension]
-
-    //Ask frontend how they'll handle grabbing profile images. Are we going to have a consistent image file named profile.jpg or something?
-    //Questions for later. For now, we know it works, and we're going to have this method return the file path so other
-    //parts of the program can use it later.
 
     // made same changes in this method and uploadImage() - Trevor
     public Response uploadProfileImage(MultipartFile multipartFile){

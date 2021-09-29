@@ -50,12 +50,5 @@ public class RabbitListener {
     @org.springframework.amqp.rabbit.annotation.RabbitListener(queues = MQConfig.USER)
     public List<Integer> getUserIdFromFeedService(Integer userId){
         return new ArrayList<>(this.userService.getFollowing(userId));
-//        System.out.println(userId);
-//        System.out.println(this.userService.getFollowing(1));
-//        template.convertAndSend(
-//                MQConfig.EXCHANGE,
-//                MQConfig.FOLLOWINGS,
-//                this.userService.getFollowing(userId)
-//        );
     }
 }
