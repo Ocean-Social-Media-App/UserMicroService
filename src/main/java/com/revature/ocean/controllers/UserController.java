@@ -220,6 +220,7 @@ public class UserController {
     }
 
     @DeleteMapping("bookmark/{userId}/{postId}")
+
     public Response removeBookmark(@PathVariable Integer userId, @PathVariable Integer postId, @RequestHeader Map<String, String> headers){
         //User user = (User) req.getSession().getAttribute("loggedInUser");
 
