@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import javax.ws.rs.Path;
 import java.util.List;
 import java.util.Set;
 import java.util.Map;
@@ -219,8 +220,8 @@ public class UserController {
         }
     }
 
-    @DeleteMapping("bookmark/{userId}")
-    public Response removeBookmark(@PathVariable Integer userId, @RequestBody Integer postId, @RequestHeader Map<String, String> headers) {
+    @DeleteMapping("bookmark/{userId}/{postId}")
+    public Response removeBookmark(@PathVariable Integer userId, @PathVariable Integer postId, @RequestHeader Map<String, String> headers) {
         //User user = (User) req.getSession().getAttribute("loggedInUser");
 
         Response response;
