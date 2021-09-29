@@ -202,7 +202,7 @@ class UserControllerTest {
         headers.put("authorization", "testing");
 
         //Mock
-        Mockito.when(userService.updateUser(tempUser)).thenReturn(null);
+        //Mockito.when(userService.updateUser(tempUser)).thenReturn(null);
         //act
         Response actualResult = this.userController.updateUser(tempUser, headers);
         //assert
