@@ -18,13 +18,14 @@ import org.springframework.web.multipart.MultipartFile;
  *        -Shane Danner
  */
 @RestController("fileUploadController")
-@RequestMapping(value= "api")
 public class FileUploadController {
 
     private S3Service s3Service;
 
     @Autowired
-    public FileUploadController(S3Service s3Service){this.s3Service = s3Service;}
+    public FileUploadController(S3Service s3Service){
+        this.s3Service = s3Service;
+    }
 
     @PostMapping("/profile")
     public ResponseEntity<Response> uploadProfileImage(@RequestParam(value = "file")MultipartFile file) {
