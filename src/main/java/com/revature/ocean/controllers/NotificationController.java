@@ -42,7 +42,7 @@ public class NotificationController {
         User user = (User) req.getSession().getAttribute("loggedInUser");
         if (user == null)
             return new Response(false, "Session not found", null);
-        List<Notification> notifications = notificationService.getTop10NotificationByUserID(user.getUserId());
+        List<Notification> notifications = notificationService.getTop25NotificationByUserID(user.getUserId());
         if (notifications == null)
             return new Response(false, "User ID not found", null);
         else
@@ -65,7 +65,7 @@ public class NotificationController {
             response = new Response(false, "Invalid Token, try again.", null);
         } else {
             if (decoded.getClaims().get("userId").asInt() == userId) {
-                List<Notification> notifications = notificationService.getNotificationByUserID(userId);
+                List<Notification> notifications = notificationService.getTop25NotificationByUserID(userId);
                 if (notifications == null) {
                     response = new Response(false, "User ID not found", null);
                 }
