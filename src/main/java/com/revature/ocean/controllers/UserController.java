@@ -213,13 +213,7 @@ public class UserController {
     }
 
     @DeleteMapping("bookmark/{userId}/{postId}")
-<<<<<<< HEAD
-    public Response removeBookmark(@PathVariable Integer userId, @PathVariable Integer postId, @RequestHeader Map<String, String> headers) {
-        //User user = (User) req.getSession().getAttribute("loggedInUser");
-
-=======
     public Response removeBookmark(@PathVariable Integer userId, @PathVariable Integer postId, @RequestHeader Map<String, String> headers){
->>>>>>> development
         Response response;
         DecodedJWT decoded = jwtUtility.verify(headers.get("authorization"));
 
@@ -259,9 +253,7 @@ public class UserController {
         }
         else {
             if(decoded.getClaims().get("userId").asInt() == userId) {
-                //User user = userService.getUserById(userId);
                 User followUser = userService.getUserById(followUserId);
-                //int id = user.getUserId();
 
                 int id = followUserId;
 
