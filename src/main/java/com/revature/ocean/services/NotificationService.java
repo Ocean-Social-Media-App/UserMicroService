@@ -41,7 +41,7 @@ public class NotificationService {
     }
 
     /**
-     * Retrieves a list of the 10 most recent notifications for a userId
+     * Retrieves a list of the 25 most recent notifications for a userId
      *
      * @param userID    userId of the logged in user who's notifications are being retrieved
      * @return          returns a list of notifications

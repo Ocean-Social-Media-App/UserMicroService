@@ -182,7 +182,7 @@ class UserServiceTest {
     @Test
     void getBookmarks() {
         //Assign
-        Set<Integer> expectedResult = new HashSet<>();
+        List<Integer> expectedResult = new ArrayList<>();
         expectedResult.add(2);
         User user = new User("user", "password", "test@test.com", "User", "Test", new Date() ,"About Me");
         user.setBookmarks(expectedResult);
@@ -191,7 +191,7 @@ class UserServiceTest {
         Mockito.when(userDao.findById(user.getUserId())).thenReturn(Optional.of(user));
 
         //Act
-        Set<Integer>  actualResult = this.userService.getBookmarks(user.getUserId());
+        List<Integer>  actualResult = this.userService.getBookmarks(user.getUserId(),1);
 
         //Assert
         assertEquals(expectedResult, actualResult);
@@ -203,7 +203,7 @@ class UserServiceTest {
     @Test
     void setBookmark() {
         //Assign
-        Set<Integer> expectedResult = new HashSet<>();
+        List<Integer> expectedResult = new ArrayList<>();
         expectedResult.add(2);
         expectedResult.add(3);
 
@@ -215,7 +215,7 @@ class UserServiceTest {
         Mockito.when(userDao.save(user)).thenReturn(user);
 
         //Act
-        Set<Integer>  actualResult = this.userService.setBookmark(user.getUserId(), 4);
+        List<Integer>  actualResult = this.userService.setBookmark(user.getUserId(), 4);
 
         //Assert
         assertEquals(expectedResult, actualResult);
@@ -228,7 +228,7 @@ class UserServiceTest {
     @Test
     void removeBookmark() {
         //Assign
-        Set<Integer> expectedResult = new HashSet<>();
+        List<Integer> expectedResult = new ArrayList<>();
         expectedResult.add(2);
         expectedResult.add(3);
 
@@ -240,7 +240,7 @@ class UserServiceTest {
         Mockito.when(userDao.save(user)).thenReturn(user);
 
         //Act
-        Set<Integer>  actualResult = this.userService.removeBookmark(user.getUserId(), 3);
+        List<Integer>  actualResult = this.userService.removeBookmark(user.getUserId(), 3);
 
         //Assert
         assertEquals(expectedResult, actualResult);

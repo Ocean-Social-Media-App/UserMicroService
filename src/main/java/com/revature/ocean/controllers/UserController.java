@@ -150,8 +150,8 @@ public class UserController {
         return response;
     }
 
-    @GetMapping("bookmark/{userId}")
-    public Response getBookmarks(@PathVariable Integer userId, @RequestHeader Map<String, String> headers) {
+    @GetMapping("bookmark/{userId}/{pageNumber}")
+    public Response getBookmarks(@PathVariable Integer userId, @PathVariable Integer pageNumber,@RequestHeader Map<String, String> headers) {
 
         Response response;
         DecodedJWT decoded = jwtUtility.verify(headers.get("authorization"));
@@ -162,7 +162,7 @@ public class UserController {
             if(decoded.getClaims().get("userId").asInt() == userId) {
                 User user = userService.getUserById(userId);
                 if (user != null) {
-                    Set<Integer> bookmarks = this.userService.getBookmarks(user.getUserId());
+                    List<Integer> bookmarks = this.userService.getBookmarks(user.getUserId(), pageNumber);
 
                     if (bookmarks != null) {
                         response = new Response(true, "Bookmarks obtained.", bookmarks);
@@ -193,7 +193,7 @@ public class UserController {
             if(decoded.getClaims().get("userId").asInt() == userId) {
                 User user = userService.getUserById(userId);
                 if (user != null) {
-                    Set<Integer> bookmarks = this.userService.setBookmark(user.getUserId(), postId);
+                    List<Integer> bookmarks = this.userService.setBookmark(user.getUserId(), postId);
 
                     if (bookmarks != null) {
                         response = new Response(true, "Bookmark set.", bookmarks);
@@ -225,7 +225,7 @@ public class UserController {
             if(decoded.getClaims().get("userId").asInt() == userId) {
                 User user = userService.getUserById(userId);
                 if (user != null) {
-                    Set<Integer> bookmarks = this.userService.removeBookmark(user.getUserId(), postId);
+                    List<Integer> bookmarks = this.userService.removeBookmark(user.getUserId(), postId);
 
                     if (bookmarks != null) {
                         response = new Response(true, "Bookmark removed.", bookmarks);

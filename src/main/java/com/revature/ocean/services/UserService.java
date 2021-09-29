@@ -9,9 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 /**
  * The UserService handles the business logic for the various actions a User will take when using the
@@ -150,10 +148,24 @@ public class UserService {
      * @param userId    the userId of the user whose bookmarks are being retrieved
      * @return          returns a set of bookmarks
      */
-    public Set<Integer> getBookmarks(Integer userId){
+    public List<Integer> getBookmarks(Integer userId, Integer pageNumber){
         User user = this.userDao.findById(userId).orElse(null);
-        Set<Integer> bookmarks = user.getBookmarks();
-        return bookmarks;
+        List<Integer> bookmarks = user.getBookmarks();
+        if(bookmarks == null){
+            return new ArrayList<>();
+        }
+
+        int start = (pageNumber-1)*20;
+        int end = (pageNumber*20)-1;
+
+        List<Integer> pages = new ArrayList<>();
+
+        for(int i = start; i<=end && i<bookmarks.size(); i++){
+            pages.add(bookmarks.get(i));
+        }
+
+
+        return pages;
     }
 
     /**
@@ -163,9 +175,9 @@ public class UserService {
      * @param postId    the postId of the post that the user is bookmarking
      * @return          returns the updated set of bookmarks
      */
-    public Set<Integer> setBookmark(Integer userId, Integer postId){
+    public List<Integer> setBookmark(Integer userId, Integer postId){
         User user = this.userDao.findById(userId).orElse(null);
-        Set<Integer> bookmarks = user.getBookmarks();
+        List<Integer> bookmarks = user.getBookmarks();
         bookmarks.add(postId);
         user.setBookmarks(bookmarks);
         this.userDao.save(user);
@@ -179,9 +191,9 @@ public class UserService {
      * @param postId    postId that will have its bookmark removed
      * @return          returns the updated set of bookmarks
      */
-    public Set<Integer> removeBookmark(Integer userId, Integer postId){
+    public List<Integer> removeBookmark(Integer userId, Integer postId){
         User user = this.userDao.findById(userId).orElse(null);
-        Set<Integer> bookmarks = user.getBookmarks();
+        List<Integer> bookmarks = user.getBookmarks();
         bookmarks.remove(postId);
         user.setBookmarks(bookmarks);
         this.userDao.save(user);
