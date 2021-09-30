@@ -22,5 +22,4 @@ public class FileUploadController {
     public ResponseEntity<Response> uploadProfileImage(@RequestParam(value = "file")MultipartFile file) {
         return new ResponseEntity<Response>(s3Service.uploadProfileImage(file), HttpStatus.OK);
     }
-
 }
