@@ -56,7 +56,7 @@ public class User {
     @Column(name = "user_last_notification")
     private Long lastNotification;
 
-    @ElementCollection(fetch = FetchType.EAGER)
+    @ElementCollection(fetch = FetchType.LAZY)
     private List<Integer> bookmarks;
 
     @ElementCollection(fetch = FetchType.EAGER)
