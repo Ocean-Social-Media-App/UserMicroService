@@ -33,6 +33,7 @@ public class UserController {
         this.jwtUtility = jwtUtility;
     }
 
+    //SET FOR REMOVAL
     //Creates a Session for the user logged in
     @GetMapping("check-session")
     public Response checkSession(HttpSession session) {
@@ -62,6 +63,7 @@ public class UserController {
         return response;
     }
 
+    //SET FOR REMOVAL
     //Logs the user out and ends the session
     @GetMapping("logout")
     public Response logout(HttpSession session) {

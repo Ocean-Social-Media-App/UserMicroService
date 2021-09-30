@@ -221,14 +221,15 @@ public class UserService {
         user.setUser_following(following);
         this.userDao.save(user);
 
-        Notification notification = new Notification();
-        notification.setUserFrom(user);
-        notification.setUserBelongTo(follow);
-        notification.setType("follow");
-        notification.setTimestamp(System.currentTimeMillis());
+        if(userId != followingID){
+            Notification notification = new Notification();
+            notification.setUserFrom(user);
+            notification.setUserBelongTo(follow);
+            notification.setType("follow");
+            notification.setTimestamp(System.currentTimeMillis());
 
-        this.notificationService.createNotification(notification);
-
+            this.notificationService.createNotification(notification);
+        }
         return following;
     }
 

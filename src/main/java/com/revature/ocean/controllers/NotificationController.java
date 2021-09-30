@@ -33,23 +33,6 @@ public class NotificationController {
     }
 
     /**
-     * MIGHT NOT BE NECESSARY, POSSIBLE REMOVAL
-     * @param req
-     * @return
-     */
-    @GetMapping("notification-preview")
-    public Response getPreviewNotification(HttpServletRequest req) {
-        User user = (User) req.getSession().getAttribute("loggedInUser");
-        if (user == null)
-            return new Response(false, "Session not found", null);
-        List<Notification> notifications = notificationService.getTop25NotificationByUserID(user.getUserId());
-        if (notifications == null)
-            return new Response(false, "User ID not found", null);
-        else
-            return new Response(true, "retrieved notification", notifications);
-    }
-
-    /**
      * Creates the API endpoint to get all notifications for the logged in user.
      *
      * @param
@@ -65,7 +48,7 @@ public class NotificationController {
             response = new Response(false, "Invalid Token, try again.", null);
         } else {
             if (decoded.getClaims().get("userId").asInt() == userId) {
-                List<Notification> notifications = notificationService.getTop25NotificationByUserID(userId);
+                List<Notification> notifications = notificationService.getTop10NotificationByUserID(userId);
                 if (notifications == null) {
                     response = new Response(false, "User ID not found", null);
                 }
