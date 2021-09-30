@@ -27,6 +27,9 @@ public class RabbitListener {
 
     @org.springframework.amqp.rabbit.annotation.RabbitListener(queues = MQConfig.POST)
     public void getPostNotificationFromFeedService(RabbitMessage message) {
+        if(message.getUserIdFrom() == message.getUserIdTo()){
+            return;
+        }
         Notification notification = new Notification();
         notification.setUserFrom(this.userService.getUserById(message.getUserIdFrom()));
         notification.setUserBelongTo(this.userService.getUserById(message.getUserIdTo()));
@@ -38,6 +41,9 @@ public class RabbitListener {
 
     @org.springframework.amqp.rabbit.annotation.RabbitListener(queues = MQConfig.LIKE)
     public void getLikeNotificationFromFeedService(RabbitMessage message) {
+        if(message.getUserIdFrom() == message.getUserIdTo()){
+            return;
+        }
         Notification notification = new Notification();
         notification.setUserFrom(this.userService.getUserById(message.getUserIdFrom()));
         notification.setUserBelongTo(this.userService.getUserById(message.getUserIdTo()));

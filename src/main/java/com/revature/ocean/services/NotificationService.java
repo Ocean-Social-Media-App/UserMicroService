@@ -46,10 +46,10 @@ public class NotificationService {
      * @param userID    userId of the logged in user who's notifications are being retrieved
      * @return          returns a list of notifications
      */
-    public List<Notification> getTop25NotificationByUserID(Integer userID) {
+    public List<Notification> getTop10NotificationByUserID(Integer userID) {
         User user = userDao.findById(userID).orElse(null);
         if (user == null) return null;
-        List<Notification> notifications = notificationDao.findTop25ByUserBelongToOrderByTimestampDesc(user);
+        List<Notification> notifications = notificationDao.findTop10ByUserBelongToOrderByTimestampDesc(user);
         notifications.forEach(NotificationService::format);
         user.setLastNotification(System.currentTimeMillis());
         userDao.save(user);

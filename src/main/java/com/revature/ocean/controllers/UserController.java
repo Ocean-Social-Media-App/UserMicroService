@@ -32,20 +32,6 @@ public class UserController {
         this.jwtUtility = jwtUtility;
     }
 
-    //Creates a Session for the user logged in
-    @GetMapping("check-session")
-    public Response checkSession(HttpSession session) {
-        Response response;
-        User user = (User) session.getAttribute("loggedInUser");
-        if (user != null) {
-            user.setPassword(null);
-            response = new Response(true, "Session found.", user);
-        } else {
-            response = new Response(false, "No session found.", null);
-        }
-        return response;
-    }
-
     //Checks to see if user is in database other wise it'll reject their log in
     @PostMapping("login")
     public Response login(@RequestBody User user) {
@@ -61,6 +47,7 @@ public class UserController {
         return response;
     }
 
+    //SET FOR REMOVAL
     //Logs the user out and ends the session
     @GetMapping("logout")
     public Response logout(HttpSession session) {
@@ -116,7 +103,6 @@ public class UserController {
     @PutMapping("updateUser")
     public Response updateUser(@RequestBody User user, @RequestHeader Map<String, String> headers) {
         Response response;
-
         DecodedJWT decoded = jwtUtility.verify(headers.get("authorization"));
         if(decoded == null) {
             return new Response(false, "Invalid Token (1), try again.", null);
@@ -124,15 +110,13 @@ public class UserController {
         else{
             if(decoded.getClaims().get("userId").asInt() == user.getUserId()) {
                 User updateUser = this.userService.updateUser(user);
-
-                    user.setPassword(null);
-                    response = new Response(true, "Token found. Profile has been updated.", user);
+                user.setPassword(null);
+                response = new Response(true, "Token found. Profile has been updated.", user);
             }
             else{
                 return new Response(false, "Invalid Token (2), try again.", null);
             }
         }
-
         return response;
     }
 
@@ -162,14 +146,13 @@ public class UserController {
                 User user = userService.getUserById(userId);
                 if (user != null) {
                     List<Integer> bookmarks = this.userService.getBookmarks(user.getUserId(), pageNumber);
-
                     if (bookmarks != null) {
                         response = new Response(true, "Bookmarks obtained.", bookmarks);
-                    } else {
+                    }else{
                         response = new Response(false, "Bookmarks not found.", null);
                     }
                     return response;
-                } else {
+                }else{
                     response = new Response(false, "User not found", null);
                     return response;
                 }
@@ -193,14 +176,13 @@ public class UserController {
                 User user = userService.getUserById(userId);
                 if (user != null) {
                     List<Integer> bookmarks = this.userService.setBookmark(user.getUserId(), postId);
-
                     if (bookmarks != null) {
                         response = new Response(true, "Bookmark set.", bookmarks);
-                    } else {
+                    }else{
                         response = new Response(false, "Bookmark not set.", null);
                     }
                     return response;
-                } else {
+                }else{
                     response = new Response(false, "User not found", null);
                     return response;
                 }
@@ -224,14 +206,13 @@ public class UserController {
                 User user = userService.getUserById(userId);
                 if (user != null) {
                     List<Integer> bookmarks = this.userService.removeBookmark(user.getUserId(), postId);
-
                     if (bookmarks != null) {
                         response = new Response(true, "Bookmark removed.", bookmarks);
-                    } else {
+                    }else{
                         response = new Response(false, "Bookmark not found.", null);
                     }
                     return response;
-                } else {
+                }else{
                     response = new Response(false, "User not found", null);
                     return response;
                 }
@@ -252,10 +233,7 @@ public class UserController {
         }
         else {
             if(decoded.getClaims().get("userId").asInt() == userId) {
-                //User user = userService.getUserById(userId);
                 User followUser = userService.getUserById(followUserId);
-                //int id = user.getUserId();
-
                 int id = followUserId;
 
                 if (followUser == null) {
@@ -268,13 +246,13 @@ public class UserController {
                     Set<Integer> followers = this.userService.follow(userId, id);
                     if (followers != null) {
                         response = new Response(true, "follow success.", followers);
-                    } else {
+                    }else{
                         response = new Response(false, "cannot follow.", null);
                     }
                     return response;
                 }
             }
-            else {
+            else{
                 return new Response(false, "Invalid Token, try again.", null);
             }
         }
@@ -291,27 +269,26 @@ public class UserController {
         else {
             if(decoded.getClaims().get("userId").asInt() == userId) {
                 User followUser = userService.getUserById(followUserId);
-
                 int id = followUserId;
 
                 Set<Integer> followings = this.userService.getFollowing(userId);
                 boolean isFollowing = followings.contains(followUserId);
                 System.out.println("Is following: " + isFollowing);
 
-                if (followUser == null) {
+                if (followUser == null){
                     response = new Response(false, "User not found", null);
                     return response;
-                } else if (followUser.getUserId() == userId) {
+                }else if (followUser.getUserId() == userId){
                     response = new Response(false, "You cannot unfollow youself", null);
                     return response;
-                } else if (!isFollowing) {
+                }else if (!isFollowing){
                     response = new Response(false, "you are not following this user.", null);
                     return response;
-                } else {
+                }else{
                     Set<Integer> followers = this.userService.unfollow(userId, id);
-                    if (followers != null) {
+                    if (followers != null){
                         response = new Response(true, "unfollow success.", followers);
-                    } else {
+                    }else{
                         response = new Response(false, "you are not following this user.", null);
                     }
                     return response;
@@ -328,20 +305,18 @@ public class UserController {
     public Response getfollowers(HttpServletRequest req) {
         User user = (User) req.getSession().getAttribute("loggedInUser");
         Response response;
-        if (user != null) {
+        if (user != null){
             Set<Integer> followers = this.userService.getFollowers(user.getUserId());
-            if (followers != null) {
+            if (followers != null){
                 response = new Response(true, "Followers obtained.", followers);
-            } else {
+            }else{
                 response = new Response(false, "Followers not found.", null);
-
             }
             return response;
         }else{
             response = new Response(false, "User not found", null);
             return response;
         }
-
     }
 
     @GetMapping("follow/{userId}")
@@ -349,22 +324,21 @@ public class UserController {
         Response response;
         DecodedJWT decoded = jwtUtility.verify(headers.get("authorization"));
 
-        if(decoded == null) {
+        if(decoded == null){
             return new Response(false, "Invalid Token, try again.", null);
         }
-        else {
-            if (decoded.getClaims().get("userId").asInt() == userId) {
+        else{
+            if (decoded.getClaims().get("userId").asInt() == userId){
                 User user = userService.getUserById(userId);
-                if (user != null) {
+                if (user != null){
                     Set<Integer> followers = this.userService.getFollowing(userId);
-                    if (followers != null) {
+                    if (followers != null){
                         response = new Response(true, "Following obtained.", followers);
-                    } else {
+                    }else{
                         response = new Response(false, "Following not found.", null);
-
                     }
                     return response;
-                } else {
+                }else{
                     response = new Response(false, "User not found", null);
                     return response;
                 }
