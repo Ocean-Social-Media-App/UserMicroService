@@ -9,7 +9,7 @@
 * TEAMWATER_SECRETKEY=[AWS-S3-SECRET-KEY]
 
 # Dockerize
-Plase run the following command in the command line, in order to dockerize the application:
+Please run the following command in the command line, in order to dockerize the application:
 ```
 mvn -DskipTests clean package
 docker build -t [IMAGE_NAME]:[TAG_NAME] .
