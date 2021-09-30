@@ -1,5 +1,6 @@
 package com.revature.ocean.services;
 
+import com.revature.ocean.models.Notification;
 import com.revature.ocean.models.User;
 import com.revature.ocean.repository.NotificationDao;
 import com.revature.ocean.repository.UserDao;
@@ -127,9 +128,9 @@ class UserServiceTest {
     void updateUser() {
         //Assign
         User beforeUpdate = new User("user", "old", "test@test.com", "User", "Test", new Date() ,"About Me");
-        User expectedResult = new User("user", "new", "test@test.com", "User1", "Test1", new Date() ,"About Me");
+        User expectedResult = new User("user", "old", "test@test.com", "User1", "Test1", new Date() ,"About Me");
 
-        Mockito.when(userDao.findUserByUsername(beforeUpdate.getUsername())).thenReturn(beforeUpdate);
+        Mockito.when(userDao.findById(beforeUpdate.getUserId())).thenReturn(Optional.of(beforeUpdate));
         Mockito.when(userDao.save(expectedResult)).thenReturn(expectedResult);
 
         //Act
@@ -139,7 +140,7 @@ class UserServiceTest {
         assertEquals(expectedResult, actualResult);
 
         //Verify
-        Mockito.verify(userDao, Mockito.times(1)).findUserByUsername(beforeUpdate.getUsername());
+        Mockito.verify(userDao, Mockito.times(1)).findById(beforeUpdate.getUserId());
         Mockito.verify(userDao, Mockito.times(1)).save(expectedResult);
 
     }
@@ -252,10 +253,51 @@ class UserServiceTest {
 
     @Test
     void follow() {
+        //Assign
+        // Setting followers to user 1
+        Set<Integer> following = new HashSet<>();
+        following.add(2);
+        User user = new User();
+        user.setUserId(1);
+        user.setUser_following(following);
+        Set<Integer> expectedResult = user.getUser_following();
+        System.out.println("EXPECTED " + expectedResult);
+
+        // Setting following back to user2 as user1 follows him.
+        Set<Integer> following2 = new HashSet<>();
+        User user2 = new User();
+        user2.setUserId(2);
+        user2.setFollowers(following2);
+        Set<Integer> followers = user2.getFollowers();
+        followers.add(user.getUserId());
+
+//        // Create Notification
+//        Notification notification = new Notification();
+//        notification.setUserFrom(user);
+//        notification.setUserBelongTo(user2);
+//        notification.setType("follow");
+//        notification.setTimestamp(System.currentTimeMillis());
+
+        Mockito.when(userDao.findById(user.getUserId())).thenReturn(Optional.of(user));
+        Mockito.when(userDao.findById(user2.getUserId())).thenReturn(Optional.of(user2));
+        Mockito.when(userDao.save(user)).thenReturn(user);
+//        Mockito.when(notificationService.createNotification(notification)).thenReturn(notification);
+
+        //Act
+        Set<Integer>  actualResult = this.userService.follow(user.getUserId(), 2);
+        System.out.println("ACTUAL " + actualResult);
+        //Assert
+        assertEquals(expectedResult, actualResult);
+
+        //Verify
+        Mockito.verify(userDao, Mockito.times(1)).findById(user.getUserId());
+        Mockito.verify(userDao, Mockito.times(1)).save(user);
+//        Mockito.verify(notificationService, Mockito.times(1)).createNotification(notification);
     }
 
     @Test
     void unfollow() {
+
     }
 
     @Test
