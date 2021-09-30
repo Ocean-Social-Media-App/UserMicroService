@@ -178,6 +178,9 @@ public class UserService {
     public List<Integer> setBookmark(Integer userId, Integer postId){
         User user = this.userDao.findById(userId).orElse(null);
         List<Integer> bookmarks = user.getBookmarks();
+        if(bookmarks.contains(postId)){
+            return null;
+        }
         bookmarks.add(postId);
         user.setBookmarks(bookmarks);
         this.userDao.save(user);
