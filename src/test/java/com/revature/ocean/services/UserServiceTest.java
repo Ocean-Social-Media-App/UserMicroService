@@ -41,7 +41,6 @@ class UserServiceTest {
     void login() {
         //Mock method being called in the same class UserService
         UserService userServiceMethod = Mockito.spy(this.userService);
-        BCryptPasswordEncoder bEncoder = Mockito.mock(BCryptPasswordEncoder.class);
         BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
 
         //Assign
@@ -51,22 +50,16 @@ class UserServiceTest {
         inputUser.setUsername("user");
         inputUser.setPassword("password");
 
-        System.out.println(inputUser);
-        String encodedPass = bEncoder.encode(inputUser.getPassword());
-        System.out.println(encodedPass);
-
         Mockito.when(userServiceMethod.checkForUser(inputUser.getUsername())).thenReturn(expectedResult);
-        Mockito.when(bEncoder.encode(inputUser.getPassword())).thenReturn(encodedPass);
-        //Mockito.when(bEncoder.matches(inputUser.getPassword(), encodedPass)).thenReturn(true);
 
         //Act
-        User actualResult = this.userService.login(inputUser);
+        this.userService.login(inputUser);
 
         //Assert
-        assertEquals(expectedResult, actualResult);
+        assertTrue(bCryptPasswordEncoder.matches(inputUser.getPassword(), bCryptPasswordEncoder.encode(expectedResult.getPassword())));
 
         //Verify
-        //Mockito.verify(bEncoder, Mockito.times(1)).matches(inputUser.getPassword(), expectedResult.getPassword());
+        Mockito.verify(userServiceMethod, Mockito.times(1)).checkForUser(expectedResult.getUsername());
     }
 
     @Test
@@ -102,6 +95,7 @@ class UserServiceTest {
 
         //Verify
         Mockito.verify(userDao, Mockito.times(1)).save(expectedResult);
+        Mockito.verify(userServiceMethod, Mockito.times(1)).checkForUser(expectedResult.getUsername());
     }
 
     @Test
@@ -260,44 +254,68 @@ class UserServiceTest {
         User user = new User();
         user.setUserId(1);
         user.setUser_following(following);
+
         Set<Integer> expectedResult = user.getUser_following();
-        System.out.println("EXPECTED " + expectedResult);
 
         // Setting following back to user2 as user1 follows him.
         Set<Integer> following2 = new HashSet<>();
         User user2 = new User();
         user2.setUserId(2);
         user2.setFollowers(following2);
+
         Set<Integer> followers = user2.getFollowers();
         followers.add(user.getUserId());
 
-//        // Create Notification
-//        Notification notification = new Notification();
-//        notification.setUserFrom(user);
-//        notification.setUserBelongTo(user2);
-//        notification.setType("follow");
-//        notification.setTimestamp(System.currentTimeMillis());
 
         Mockito.when(userDao.findById(user.getUserId())).thenReturn(Optional.of(user));
         Mockito.when(userDao.findById(user2.getUserId())).thenReturn(Optional.of(user2));
         Mockito.when(userDao.save(user)).thenReturn(user);
-//        Mockito.when(notificationService.createNotification(notification)).thenReturn(notification);
 
         //Act
         Set<Integer>  actualResult = this.userService.follow(user.getUserId(), 2);
-        System.out.println("ACTUAL " + actualResult);
+
         //Assert
         assertEquals(expectedResult, actualResult);
 
         //Verify
         Mockito.verify(userDao, Mockito.times(1)).findById(user.getUserId());
         Mockito.verify(userDao, Mockito.times(1)).save(user);
-//        Mockito.verify(notificationService, Mockito.times(1)).createNotification(notification);
     }
 
     @Test
     void unfollow() {
+        //Assign
+        // Setting followers to user 1
+        Set<Integer> following = new HashSet<>();
+        following.add(2);
+        User user = new User();
+        user.setUserId(1);
+        user.setUser_following(following);
 
+        Set<Integer> expectedResult = user.getUser_following();
+
+        // Setting following back to user2 as user1 follows him.
+        Set<Integer> following2 = new HashSet<>();
+        User user2 = new User();
+        user2.setUserId(2);
+        user2.setFollowers(following2);
+
+        Set<Integer> followers = user2.getFollowers();
+        followers.add(user.getUserId());
+
+        Mockito.when(userDao.findById(user.getUserId())).thenReturn(Optional.of(user));
+        Mockito.when(userDao.findById(user2.getUserId())).thenReturn(Optional.of(user2));
+        Mockito.when(userDao.save(user)).thenReturn(user);
+
+        //Act
+        Set<Integer>  actualResult = this.userService.unfollow(user.getUserId(), 2);
+
+        //Assert
+        assertEquals(expectedResult, actualResult);
+
+        //Verify
+        Mockito.verify(userDao, Mockito.times(1)).findById(user.getUserId());
+        Mockito.verify(userDao, Mockito.times(1)).save(user);
     }
 
     @Test
