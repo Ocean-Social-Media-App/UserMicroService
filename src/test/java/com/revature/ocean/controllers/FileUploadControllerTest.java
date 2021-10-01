@@ -4,49 +4,46 @@ import com.revature.ocean.models.Response;
 import com.revature.ocean.services.S3Service;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.Mock;
-import org.mockito.Mockito;
-import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.boot.autoconfigure.security.reactive.ReactiveSecurityAutoConfiguration;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.web.multipart.MultipartFile;
 
-import static org.junit.jupiter.api.Assertions.*;
+import java.io.File;
+import java.io.IOException;
 
-@SpringBootTest
-@ExtendWith(MockitoExtension.class)
-class FileUploadControllerTest {
-    FileUploadController fileUploadController;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
-    @Mock
+public class FileUploadControllerTest {
+
     S3Service s3Service;
+    MultipartFile file;
+    File convertedFile;
+    FileUploadController fileUploadController;
+    private String bucketUrl = "https://teamwaterbucket.s3.us-east-2.amazonaws.com/";
 
     @BeforeEach
-    void setUp() {
-        this.fileUploadController = new FileUploadController(s3Service);
+    public void setup() throws IOException {
+        s3Service = new S3Service();
+        file = mock(MultipartFile.class);
+        convertedFile = mock(File.class);
+        fileUploadController = new FileUploadController(s3Service);
+        byte a = 99;
+        byte b = 98;
+        byte[] c = {a, b};
+        when(file.getOriginalFilename()).thenReturn("testingAgain");
+        when(file.getBytes()).thenReturn(c);
     }
 
     @Test
-    void uploadProfileImage() {
-        //Assign
-        FileUploadController mockFileUploadController = Mockito.spy(this.fileUploadController);
-        Response expectedResponse = new Response(true, "image uploaded","https://teamwaterbucket.s3.us-east-2.amazonaws.com/");
+    public void uploadProfileImageTest(){
+        String fileName = bucketUrl + "users/images/profile/" + file.getOriginalFilename();
+        //when(s3Service.uploadProfileImage(file)).thenReturn(new Response(true, "image uploaded","test"));
+        Response expectedResponse = new Response(true, "image uploaded",fileName);
+        ResponseEntity<Response> actualResult = fileUploadController.uploadProfileImage(file);
+        ResponseEntity<Response> expectedResult = new ResponseEntity<Response>(expectedResponse, HttpStatus.OK);
 
-        //MultipartFile mockFile = Mockito.mock(MultipartFile.class);
-        MockMultipartFile mockFile = new MockMultipartFile("user-file","sample.txt",
-                "text/plain", "test data".getBytes());
-
-        //Mockito.doReturn(expectedResponse).when(mockFileUploadController.uploadProfileImage(mockFile));
-        Mockito.when(s3Service.uploadProfileImage(mockFile)).thenReturn(expectedResponse);
-
-        //Act
-        ResponseEntity<Response> actualResponse = this.fileUploadController.uploadProfileImage(mockFile);
-
-        //Assert
-        assertEquals(expectedResponse, actualResponse.getBody());
+        assertEquals(expectedResult, actualResult);
     }
 }
