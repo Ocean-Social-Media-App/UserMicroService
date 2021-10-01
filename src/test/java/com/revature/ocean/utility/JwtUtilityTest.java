@@ -24,7 +24,9 @@ public class JwtUtilityTest {
 
     @Test
     public void verifySucceed(){
-        assertNull(jwtUtility.verify("testing"));
+        String token = jwtUtility.genToken(2);
+
+        assertNotNull(jwtUtility.verify(token));
     }
 
     @Test
