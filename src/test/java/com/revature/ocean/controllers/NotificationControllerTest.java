@@ -21,6 +21,8 @@ import static org.mockito.Mockito.when;
 @SpringBootTest
 @ExtendWith(MockitoExtension.class)
 public class NotificationControllerTest {
+    //David: Notification controller keeps throwing a nullPointerException and I'm not sure what's wrong.
+
     /*
         @Mock
     UserService userService;
