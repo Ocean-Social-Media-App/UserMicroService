@@ -225,7 +225,7 @@ class UserControllerTest {
         DecodedJWT decodedJWT = mock(DecodedJWT.class);
 
         //Mock
-        Mockito.when(decodedJWT.getClaims().get("userId").asInt()).thenReturn(999999);
+        Mockito.when(decodedJWT.getClaims().get("userId").asInt()).thenReturn(999999); //Need this to work, or get nullpointer in UserService
         Mockito.when(userService.updateUser(user)).thenReturn(user);
         Mockito.when(jwtUtility.genToken(999999)).thenReturn("testing");
         Mockito.when(jwtUtility.verify(headers.get("authorization"))).thenReturn(decodedJWT);
