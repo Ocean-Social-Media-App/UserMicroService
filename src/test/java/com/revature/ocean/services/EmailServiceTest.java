@@ -43,7 +43,7 @@ class EmailServiceTest {
     }
 
     @Test
-    void sendNewPassword(){
+    void sendNewPasswordMessageContents(){
         EmailService emailService = Mockito.spy(this.emailService);
         String pass = emailService.newPassword();
         SimpleMailMessage message = new SimpleMailMessage();
@@ -52,7 +52,7 @@ class EmailServiceTest {
         User user = new User("user", "password", "tommy.arnette@gmail.com", "Tommy", "TEST", new Date());
 
         message.setTo(user.getEmail());
-        message.setSubject("Ocean Social Password Reset");
+
         message.setText("Hello "+ user.getFirstName() +",\n" +
                 "This email is to confirm your password has been reset.\n" +
                 "Please find your new password is.\n" +
@@ -66,7 +66,6 @@ class EmailServiceTest {
                 "at oceansocailapp@gmail.com\n" +
                 "Thank you and have a great day!\n" +
                 "\n");
-        //javaMailSender.send(message);
 
         String expectedMessageContents = message.getText();
 
