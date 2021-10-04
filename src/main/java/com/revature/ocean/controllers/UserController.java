@@ -131,8 +131,8 @@ public class UserController {
                     user.setPassword(new BCryptPasswordEncoder().encode(user.getPassword()));
                 User updateUser = this.userService.updateUser(user);
 
-                    user.setPassword(null);
-                    response = new Response(true, "Token found. Profile has been updated.", user);
+                user.setPassword(null);
+                response = new Response(true, "Token found. Profile has been updated.", updateUser);
             }
             else{
                 return new Response(false, "Invalid Token (2), try again.", null);

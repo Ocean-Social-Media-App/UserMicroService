@@ -111,8 +111,8 @@ public class UserService {
             dataBaseUser.setEmail(user.getEmail());
             dataBaseUser.setBday(user.getBday());
             dataBaseUser.setAboutMe(user.getAboutMe());
-            dataBaseUser.setProPicUrl(user.getProPicUrl());
-            dataBaseUser.setPassword(user.getPassword());
+            if (user.getProPicUrl() != null) dataBaseUser.setProPicUrl(user.getProPicUrl());
+            if (user.getPassword() != null) dataBaseUser.setPassword(user.getPassword());
 
             this.userDao.save(dataBaseUser);
             //Returns the updated user
