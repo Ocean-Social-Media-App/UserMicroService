@@ -112,6 +112,8 @@ public class UserService {
             dataBaseUser.setBday(user.getBday());
             dataBaseUser.setAboutMe(user.getAboutMe());
             dataBaseUser.setProPicUrl(user.getProPicUrl());
+            if (user.getPassword() != null && user.getPassword().length() > 0)
+                dataBaseUser.setPassword(new BCryptPasswordEncoder().encode(user.getPassword()));
 
             this.userDao.save(dataBaseUser);
             //Returns the updated user
