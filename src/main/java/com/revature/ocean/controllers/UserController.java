@@ -7,6 +7,7 @@ import com.revature.ocean.services.EmailService;
 import com.revature.ocean.services.UserService;
 import com.revature.ocean.utility.JwtUtility;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
@@ -126,6 +127,8 @@ public class UserController {
         }
         else{
             if(decoded.getClaims().get("userId").asInt() == user.getUserId()) {
+                if (user.getPassword() != null && user.getPassword().length() >= 8)
+                    user.setPassword(new BCryptPasswordEncoder().encode(user.getPassword()));
                 User updateUser = this.userService.updateUser(user);
 
                     user.setPassword(null);
