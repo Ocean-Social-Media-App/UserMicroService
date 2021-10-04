@@ -1,5 +1,8 @@
 package com.revature.ocean.controllers;
 
+import com.auth0.jwt.JWT;
+import com.auth0.jwt.algorithms.Algorithm;
+import com.auth0.jwt.interfaces.DecodedJWT;
 import com.revature.ocean.models.Notification;
 import com.revature.ocean.models.Response;
 import com.revature.ocean.models.User;
@@ -55,11 +58,16 @@ public class NotificationControllerTest {
         notificationList.add(new Notification(1,"follow",Long.parseLong("1633099934481"),follow,user,1,null,null));
 
         Map<String, String> headers = new HashMap<>();
-        headers.put("userId", "1");
-        headers.put("authorization", "testing");
+        headers.put("authorization", "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjF9.ySOxFp27cOKtfNocKcJncEQALi_o9gDz-QXfIkKSvvA");
 
         Response expectedResult = new Response(true, "retrieved notification", notificationList);
-        //Mock
+
+        String token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjF9.ySOxFp27cOKtfNocKcJncEQALi_o9gDz-QXfIkKSvvA";
+        DecodedJWT jwt = JWT.require(Algorithm.HMAC256("Ocean-Kevin-Child"))
+                .build()
+                .verify(token);
+
+        Mockito.when(jwtUtility.verify(headers.get("authorization"))).thenReturn(jwt);
         Mockito.when(notificationService.getTop10NotificationByUserID(1)).thenReturn(notificationList);
 
         //Act

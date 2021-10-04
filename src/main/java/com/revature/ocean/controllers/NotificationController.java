@@ -45,7 +45,7 @@ public class NotificationController {
         DecodedJWT decoded = jwtUtility.verify(headers.get("authorization"));
 
         if (decoded == null) {
-            response = new Response(false, "Invalid Token, try again.", null);
+            response = new Response(false, "Invalid Token, try again1.", null);
         } else {
             if (decoded.getClaims().get("userId").asInt() == userId) {
                 List<Notification> notifications = notificationService.getTop10NotificationByUserID(userId);
@@ -56,7 +56,7 @@ public class NotificationController {
                     response = new Response(true, "retrieved notification", notifications);
                 }
             } else {
-                response = new Response(false, "Invalid Token, try again.", null);
+                response = new Response(false, "Invalid Token, try again2.", null);
             }
         }
         return response;
