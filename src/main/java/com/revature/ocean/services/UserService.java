@@ -111,6 +111,7 @@ public class UserService {
             dataBaseUser.setEmail(user.getEmail());
             dataBaseUser.setBday(user.getBday());
             dataBaseUser.setAboutMe(user.getAboutMe());
+            dataBaseUser.setProPicUrl(user.getProPicUrl());
 
             this.userDao.save(dataBaseUser);
             //Returns the updated user
