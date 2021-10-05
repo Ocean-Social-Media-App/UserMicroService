@@ -1,5 +1,6 @@
 package com.revature.ocean.services;
 
+import com.revature.ocean.models.Notification;
 import com.revature.ocean.models.User;
 import com.revature.ocean.repository.NotificationDao;
 import com.revature.ocean.repository.UserDao;
@@ -36,37 +37,30 @@ class UserServiceTest {
     }
 
 
-//    @Test
-//    void login() {
-//        //Mock method being called in the same class UserService
-//        UserService userServiceMethod = Mockito.spy(this.userService);
-//        BCryptPasswordEncoder bEncoder = Mockito.mock(BCryptPasswordEncoder.class);
-//        BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
-//
-//        //Assign
-//        // Mock DB entry
-//        User expectedResult = new User("user", "password", "test@test.com", "User", "Test", new Date(), "About Me");
-//        User inputUser = expectedResult;
-//        inputUser.setUsername("user");
-//        inputUser.setPassword("password");
-//
-//        System.out.println(inputUser);
-//        String encodedPass = bCryptPasswordEncoder.encode(inputUser.getPassword());
-//        System.out.println(encodedPass);
-//
-//        Mockito.when(userServiceMethod.checkForUser(inputUser.getUsername())).thenReturn(expectedResult);
-//        //Mockito.when(bCryptPasswordEncoder.encode(inputUser.getPassword())).thenReturn(encodedPass);
-//        //Mockito.when(bEncoder.matches(inputUser.getPassword(), encodedPass)).thenReturn(true);
-//
-//        //Act
-//        User actualResult = this.userService.login(inputUser);
-//
-//        //Assert
-//        assertEquals(expectedResult, actualResult);
-//
-//        //Verify
-//        //Mockito.verify(bEncoder, Mockito.times(1)).matches(inputUser.getPassword(), expectedResult.getPassword());
-//    }
+    @Test
+    void login() {
+        //Mock method being called in the same class UserService
+        UserService userServiceMethod = Mockito.spy(this.userService);
+        BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
+
+        //Assign
+        // Mock DB entry
+        User expectedResult = new User("user", "password", "test@test.com", "User", "Test", new Date(), "About Me");
+        User inputUser = expectedResult;
+        inputUser.setUsername("user");
+        inputUser.setPassword("password");
+
+        Mockito.when(userServiceMethod.checkForUser(inputUser.getUsername())).thenReturn(expectedResult);
+
+        //Act
+        this.userService.login(inputUser);
+
+        //Assert
+        assertTrue(bCryptPasswordEncoder.matches(inputUser.getPassword(), bCryptPasswordEncoder.encode(expectedResult.getPassword())));
+
+        //Verify
+        Mockito.verify(userServiceMethod, Mockito.times(1)).checkForUser(expectedResult.getUsername());
+    }
 
     @Test
     void checkForUser() {
@@ -101,6 +95,7 @@ class UserServiceTest {
 
         //Verify
         Mockito.verify(userDao, Mockito.times(1)).save(expectedResult);
+        Mockito.verify(userServiceMethod, Mockito.times(1)).checkForUser(expectedResult.getUsername());
     }
 
     @Test
@@ -127,9 +122,9 @@ class UserServiceTest {
     void updateUser() {
         //Assign
         User beforeUpdate = new User("user", "old", "test@test.com", "User", "Test", new Date() ,"About Me");
-        User expectedResult = new User("user", "new", "test@test.com", "User1", "Test1", new Date() ,"About Me");
+        User expectedResult = new User("user", "old", "test@test.com", "User1", "Test1", new Date() ,"About Me");
 
-        Mockito.when(userDao.findUserByUsername(beforeUpdate.getUsername())).thenReturn(beforeUpdate);
+        Mockito.when(userDao.findById(beforeUpdate.getUserId())).thenReturn(Optional.of(beforeUpdate));
         Mockito.when(userDao.save(expectedResult)).thenReturn(expectedResult);
 
         //Act
@@ -139,7 +134,7 @@ class UserServiceTest {
         assertEquals(expectedResult, actualResult);
 
         //Verify
-        Mockito.verify(userDao, Mockito.times(1)).findUserByUsername(beforeUpdate.getUsername());
+        Mockito.verify(userDao, Mockito.times(1)).findById(beforeUpdate.getUserId());
         Mockito.verify(userDao, Mockito.times(1)).save(expectedResult);
 
     }
@@ -252,10 +247,75 @@ class UserServiceTest {
 
     @Test
     void follow() {
+        //Assign
+        // Setting followers to user 1
+        Set<Integer> following = new HashSet<>();
+        following.add(2);
+        User user = new User();
+        user.setUserId(1);
+        user.setUser_following(following);
+
+        Set<Integer> expectedResult = user.getUser_following();
+
+        // Setting following back to user2 as user1 follows him.
+        Set<Integer> following2 = new HashSet<>();
+        User user2 = new User();
+        user2.setUserId(2);
+        user2.setFollowers(following2);
+
+        Set<Integer> followers = user2.getFollowers();
+        followers.add(user.getUserId());
+
+
+        Mockito.when(userDao.findById(user.getUserId())).thenReturn(Optional.of(user));
+        Mockito.when(userDao.findById(user2.getUserId())).thenReturn(Optional.of(user2));
+        Mockito.when(userDao.save(user)).thenReturn(user);
+
+        //Act
+        Set<Integer>  actualResult = this.userService.follow(user.getUserId(), 2);
+
+        //Assert
+        assertEquals(expectedResult, actualResult);
+
+        //Verify
+        Mockito.verify(userDao, Mockito.times(1)).findById(user.getUserId());
+        Mockito.verify(userDao, Mockito.times(1)).save(user);
     }
 
     @Test
     void unfollow() {
+        //Assign
+        // Setting followers to user 1
+        Set<Integer> following = new HashSet<>();
+        following.add(2);
+        User user = new User();
+        user.setUserId(1);
+        user.setUser_following(following);
+
+        Set<Integer> expectedResult = user.getUser_following();
+
+        // Setting following back to user2 as user1 follows him.
+        Set<Integer> following2 = new HashSet<>();
+        User user2 = new User();
+        user2.setUserId(2);
+        user2.setFollowers(following2);
+
+        Set<Integer> followers = user2.getFollowers();
+        followers.add(user.getUserId());
+
+        Mockito.when(userDao.findById(user.getUserId())).thenReturn(Optional.of(user));
+        Mockito.when(userDao.findById(user2.getUserId())).thenReturn(Optional.of(user2));
+        Mockito.when(userDao.save(user)).thenReturn(user);
+
+        //Act
+        Set<Integer>  actualResult = this.userService.unfollow(user.getUserId(), 2);
+
+        //Assert
+        assertEquals(expectedResult, actualResult);
+
+        //Verify
+        Mockito.verify(userDao, Mockito.times(1)).findById(user.getUserId());
+        Mockito.verify(userDao, Mockito.times(1)).save(user);
     }
 
     @Test
